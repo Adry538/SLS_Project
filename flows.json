@@ -2,42 +2,64 @@
     {
         "id": "3155fc29ace33dcb",
         "type": "tab",
-        "label": "Flow 1",
+        "label": "main",
         "disabled": false,
         "info": "",
         "env": []
     },
     {
-        "id": "bf6d5c795f83a143",
-        "type": "inject",
-        "z": "3155fc29ace33dcb",
-        "name": "",
-        "props": [
-            {
-                "p": "payload"
-            },
-            {
-                "p": "topic",
-                "vt": "str"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 120,
-        "y": 60,
-        "wires": [
-            [
-                "960b81b9ba5b01c9"
-            ]
-        ]
+        "id": "ed5a922bb126bd97",
+        "type": "tab",
+        "label": "ADS Anbindung",
+        "disabled": false,
+        "info": "",
+        "env": []
     },
     {
-        "id": "960b81b9ba5b01c9",
+        "id": "3953286b03d613bb",
+        "type": "ads-client-connection",
+        "name": "SLS",
+        "targetAmsNetId": "169.254.233.169.1.1",
+        "targetAdsPort": "851",
+        "objectifyEnumerations": true,
+        "convertDatesToJavascript": true,
+        "readAndCacheSymbols": false,
+        "readAndCacheDataTypes": false,
+        "disableSymbolVersionMonitoring": false,
+        "routerTcpPort": "",
+        "routerAddress": "",
+        "localAddress": "",
+        "localTcpPort": "",
+        "localAmsNetId": "",
+        "localAdsPort": "",
+        "timeoutDelay": "",
+        "hideConsoleWarnings": false,
+        "autoReconnect": true,
+        "reconnectInterval": "",
+        "checkStateInterval": "",
+        "connectionDownDelay": "",
+        "allowHalfOpen": false,
+        "disableBigInt": false,
+        "debuggingLevel": "",
+        "bareClient": false
+    },
+    {
+        "id": "19d3d373c748b635",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "InfluxDB",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "2081f9a6f880d625",
         "type": "debug",
         "z": "3155fc29ace33dcb",
         "name": "debug 1",
@@ -48,8 +70,145 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 280,
-        "y": 60,
+        "x": 360,
+        "y": 40,
         "wires": []
+    },
+    {
+        "id": "4c955c27b4c987e7",
+        "type": "ads-client-connection-status",
+        "z": "3155fc29ace33dcb",
+        "name": "SLS ADS Status",
+        "connection": "3953286b03d613bb",
+        "showInput": false,
+        "inputs": 0,
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "2081f9a6f880d625"
+            ]
+        ]
+    },
+    {
+        "id": "e4df73de800acf01",
+        "type": "ads-client-subscribe",
+        "z": "3155fc29ace33dcb",
+        "name": "iPowerInfrared1",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iPowerInfrared1",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 120,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f26e20653427d64c",
+        "type": "function",
+        "z": "3155fc29ace33dcb",
+        "name": "Set Variables",
+        "func": "var iPowerInfrared1 = msg.payload;\nglobal.set(\"iPowerInfrared1\", iPowerInfrared1);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "bc8efa2f0c30955b"
+            ]
+        ]
+    },
+    {
+        "id": "595e5379d7c732b2",
+        "type": "inject",
+        "z": "3155fc29ace33dcb",
+        "name": "Test",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "21",
+        "payloadType": "num",
+        "x": 90,
+        "y": 160,
+        "wires": [
+            [
+                "f26e20653427d64c"
+            ]
+        ]
+    },
+    {
+        "id": "2c677e7d6676438b",
+        "type": "debug",
+        "z": "3155fc29ace33dcb",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "6ee74b4ddc4656ef",
+        "type": "influxdb out",
+        "z": "3155fc29ace33dcb",
+        "influxdb": "19d3d373c748b635",
+        "name": "InfluxDB",
+        "measurement": "SLS_Power",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "KIT",
+        "bucket": "SLS_Data",
+        "x": 740,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "bc8efa2f0c30955b",
+        "type": "function",
+        "z": "3155fc29ace33dcb",
+        "name": "Set Data for InfluxDB",
+        "func": "msg.topic=\"InfluxData\"\nvar power=global.get(\"iPowerInfrared1\")\nvar timestamp = Date.now()\nmsg.payload={\n    \"timestamp\" : timestamp,\n    \"power\" : power\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 200,
+        "wires": [
+            [
+                "6ee74b4ddc4656ef",
+                "2c677e7d6676438b"
+            ]
+        ]
     }
 ]
