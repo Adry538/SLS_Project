@@ -195,7 +195,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Set Data for InfluxDB",
-        "func": "msg.topic=\"InfluxData\"\nvar power=global.get(\"iPowerInfrared1\")\nvar timestamp = Date.now()\nmsg.payload={\n    \"timestamp\" : timestamp,\n    \"power\" : power\n}\nreturn msg;",
+        "func": "msg.topic=\"InfluxData\"\nvar powerInfrared1=global.get(\"iPowerInfrared1\")\nvar timestamp = Date.now()\nvar powerInfrared = [timestamp, powerInfrared1, \"Sintern\", \"Bauteil XY\"]\nmsg.payload={\n    \"timestamp\" : timestamp,\n    \"powerInfared\" : powerInfrared\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -206,8 +206,8 @@
         "y": 200,
         "wires": [
             [
-                "6ee74b4ddc4656ef",
-                "2c677e7d6676438b"
+                "2c677e7d6676438b",
+                "6ee74b4ddc4656ef"
             ]
         ]
     }
