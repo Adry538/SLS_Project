@@ -59,101 +59,32 @@
         "rejectUnauthorized": true
     },
     {
-        "id": "2081f9a6f880d625",
-        "type": "debug",
-        "z": "3155fc29ace33dcb",
-        "name": "debug 1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 360,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "4c955c27b4c987e7",
-        "type": "ads-client-connection-status",
-        "z": "3155fc29ace33dcb",
-        "name": "SLS ADS Status",
-        "connection": "3953286b03d613bb",
-        "showInput": false,
-        "inputs": 0,
-        "x": 120,
-        "y": 40,
-        "wires": [
-            [
-                "2081f9a6f880d625"
-            ]
-        ]
-    },
-    {
-        "id": "e4df73de800acf01",
-        "type": "ads-client-subscribe",
-        "z": "3155fc29ace33dcb",
-        "name": "iPowerInfrared1",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iPowerInfrared1",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 120,
-        "y": 100,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "f26e20653427d64c",
-        "type": "function",
-        "z": "3155fc29ace33dcb",
-        "name": "Set Variables",
-        "func": "var iPowerInfrared1 = msg.payload;\nglobal.set(\"iPowerInfrared1\", iPowerInfrared1);\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 350,
-        "y": 100,
-        "wires": [
-            [
-                "bc8efa2f0c30955b"
-            ]
-        ]
-    },
-    {
-        "id": "595e5379d7c732b2",
-        "type": "inject",
-        "z": "3155fc29ace33dcb",
-        "name": "Test",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "21",
-        "payloadType": "num",
-        "x": 90,
-        "y": 160,
-        "wires": [
-            [
-                "f26e20653427d64c"
-            ]
-        ]
+        "id": "a552810e30ae71e2",
+        "type": "ads-client-connection",
+        "name": "SLS2",
+        "targetAmsNetId": "172.25.177.227.1.1",
+        "targetAdsPort": "851",
+        "objectifyEnumerations": true,
+        "convertDatesToJavascript": true,
+        "readAndCacheSymbols": false,
+        "readAndCacheDataTypes": false,
+        "disableSymbolVersionMonitoring": false,
+        "routerTcpPort": "",
+        "routerAddress": "",
+        "localAddress": "",
+        "localTcpPort": "",
+        "localAmsNetId": "",
+        "localAdsPort": "",
+        "timeoutDelay": "",
+        "hideConsoleWarnings": false,
+        "autoReconnect": true,
+        "reconnectInterval": "",
+        "checkStateInterval": "",
+        "connectionDownDelay": "",
+        "allowHalfOpen": false,
+        "disableBigInt": false,
+        "debuggingLevel": "",
+        "bareClient": false
     },
     {
         "id": "2c677e7d6676438b",
@@ -178,7 +109,7 @@
         "z": "3155fc29ace33dcb",
         "influxdb": "19d3d373c748b635",
         "name": "InfluxDB",
-        "measurement": "SLS_Power",
+        "measurement": "Test",
         "precision": "",
         "retentionPolicy": "",
         "database": "database",
@@ -195,7 +126,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Set Data for InfluxDB",
-        "func": "msg.topic=\"InfluxData\"\nvar powerInfrared1=global.get(\"iPowerInfrared1\")\nvar timestamp = Date.now()\nvar powerInfrared = [timestamp, powerInfrared1, \"Sintern\", \"Bauteil XY\"]\nmsg.payload={\n    \"timestamp\" : timestamp,\n    \"powerInfared\" : powerInfrared\n}\nreturn msg;",
+        "func": "msg.topic=\"InfluxData\"\nvar powerInfrared1=global.get(\"iPowerInfrared1\")\nvar timestamp = Date.now()\nvar powerInfrared = powerInfrared1\nvar process = 0\nvar component = 10\nmsg.payload={\n    \"timestamp\" : timestamp,\n    \"powerInfared\" : powerInfrared,\n    \"process\" : process,\n    \"component\" : component\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -210,5 +141,301 @@
                 "6ee74b4ddc4656ef"
             ]
         ]
+    },
+    {
+        "id": "f6c8b81ea62a84e7",
+        "type": "influxdb batch",
+        "z": "3155fc29ace33dcb",
+        "influxdb": "19d3d373c748b635",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "InfluxDB Batch",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "KIT",
+        "bucket": "SLS_Data",
+        "x": 760,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "966e8c40bf2ac949",
+        "type": "function",
+        "z": "3155fc29ace33dcb",
+        "name": "Set Message Format",
+        "func": "msg.payload = [\n    {\n        measurement: \"Power\",\n        fields: {\n            powerHeatingMat1: 5.5,\n            powerHeatingMat2: 10,\n            powerNozzle: 15\n        },\n        tags:{\n            process:\"Sintern\",\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 40,
+        "wires": [
+            [
+                "f6c8b81ea62a84e7"
+            ]
+        ]
+    },
+    {
+        "id": "bd8c4fa4632e8aee",
+        "type": "inject",
+        "z": "3155fc29ace33dcb",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "0895be440011be08"
+            ]
+        ]
+    },
+    {
+        "id": "0895be440011be08",
+        "type": "function",
+        "z": "3155fc29ace33dcb",
+        "name": "Power Calculation",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 40,
+        "wires": [
+            [
+                "966e8c40bf2ac949"
+            ]
+        ]
+    },
+    {
+        "id": "e8634bdf5693be6f",
+        "type": "ads-client-connection-status",
+        "z": "ed5a922bb126bd97",
+        "name": "SLS ADS Status",
+        "connection": "3953286b03d613bb",
+        "showInput": false,
+        "inputs": 0,
+        "x": 120,
+        "y": 40,
+        "wires": [
+            [
+                "0daed83fcdaaf541"
+            ]
+        ]
+    },
+    {
+        "id": "0daed83fcdaaf541",
+        "type": "debug",
+        "z": "ed5a922bb126bd97",
+        "name": "SLS ADS Status",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "fa8eff2047e11308",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Variables",
+        "func": "var iPowerInfrared1 = msg.payload;\nglobal.set(\"iPowerInfrared1\", iPowerInfrared1);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 100,
+        "wires": [
+            [
+                "203565c39f54deeb"
+            ]
+        ]
+    },
+    {
+        "id": "8ab2c2e0780deec9",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared1",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iPowerInfrared1",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "fa8eff2047e11308"
+            ]
+        ]
+    },
+    {
+        "id": "203565c39f54deeb",
+        "type": "debug",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "8506b4ce4abd3ff7",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Variables",
+        "func": "var iPowerInfrared2 = msg.payload;\nglobal.set(\"iPowerInfrared2\", iPowerInfrared2);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 160,
+        "wires": [
+            [
+                "91ae826233fe9373"
+            ]
+        ]
+    },
+    {
+        "id": "5b0a7bbcf9b15cdf",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared2",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iPowerInfrared2",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 120,
+        "y": 160,
+        "wires": [
+            [
+                "8506b4ce4abd3ff7"
+            ]
+        ]
+    },
+    {
+        "id": "91ae826233fe9373",
+        "type": "debug",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "b382369e19c81afa",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Variables",
+        "func": "var iPowerInfrared3 = msg.payload;\nglobal.set(\"iPowerInfrared3\", iPowerInfrared3);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "6edec28560b8217b"
+            ]
+        ]
+    },
+    {
+        "id": "f2f7862ed5b90ef7",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared3",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iPowerInfrared3",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 120,
+        "y": 220,
+        "wires": [
+            [
+                "b382369e19c81afa"
+            ]
+        ]
+    },
+    {
+        "id": "6edec28560b8217b",
+        "type": "debug",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 220,
+        "wires": []
     }
 ]
