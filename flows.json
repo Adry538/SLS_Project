@@ -155,7 +155,7 @@
         "retentionPolicyV18Flux": "",
         "org": "KIT",
         "bucket": "SLS_Data",
-        "x": 760,
+        "x": 820,
         "y": 40,
         "wires": []
     },
@@ -171,7 +171,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 540,
+        "x": 600,
         "y": 40,
         "wires": [
             [
@@ -183,7 +183,7 @@
         "id": "bd8c4fa4632e8aee",
         "type": "inject",
         "z": "3155fc29ace33dcb",
-        "name": "",
+        "name": "Send Data to InfluxDB",
         "props": [
             {
                 "p": "payload"
@@ -200,7 +200,7 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 120,
+        "x": 140,
         "y": 40,
         "wires": [
             [
@@ -213,18 +213,43 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Power Calculation",
-        "func": "\nreturn msg;",
+        "func": "// Infrarotheizung\n\n// Heizmatte 1 (Bauplattform)\n\n// Heizmatte 2 (Pulverplattform)\n\n// Heizmatte 3 (Faserintegration)\n\n// Düsenheizung\n\n// Laser\n\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\n\n// Motor 2 (Vorratsplattform)\n\n// Motor 3 (Düse X-Achse)\n\n// Motor 4 (Düse Y-Achse)\n\n// Motor 5 (Rakel)\n\n// Motor 6 (Faservorschub)\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 310,
+        "x": 370,
         "y": 40,
         "wires": [
             [
                 "966e8c40bf2ac949"
+            ]
+        ]
+    },
+    {
+        "id": "7004d7ff56d54fe9",
+        "type": "inject",
+        "z": "3155fc29ace33dcb",
+        "name": "Send Data to InfluxDB",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 200,
+        "wires": [
+            [
+                "bc8efa2f0c30955b"
             ]
         ]
     },
@@ -265,7 +290,7 @@
         "id": "fa8eff2047e11308",
         "type": "function",
         "z": "ed5a922bb126bd97",
-        "name": "Set Variables",
+        "name": "Set Global Variable",
         "func": "var iPowerInfrared1 = msg.payload;\nglobal.set(\"iPowerInfrared1\", iPowerInfrared1);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -273,11 +298,11 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
+        "x": 370,
         "y": 100,
         "wires": [
             [
-                "203565c39f54deeb"
+                "3babe7c99581d022"
             ]
         ]
     },
@@ -304,27 +329,10 @@
         ]
     },
     {
-        "id": "203565c39f54deeb",
-        "type": "debug",
-        "z": "ed5a922bb126bd97",
-        "name": "iPowerInfrared1",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 580,
-        "y": 100,
-        "wires": []
-    },
-    {
         "id": "8506b4ce4abd3ff7",
         "type": "function",
         "z": "ed5a922bb126bd97",
-        "name": "Set Variables",
+        "name": "Set Global Variable",
         "func": "var iPowerInfrared2 = msg.payload;\nglobal.set(\"iPowerInfrared2\", iPowerInfrared2);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -332,12 +340,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
+        "x": 370,
         "y": 160,
         "wires": [
-            [
-                "91ae826233fe9373"
-            ]
+            []
         ]
     },
     {
@@ -363,27 +369,10 @@
         ]
     },
     {
-        "id": "91ae826233fe9373",
-        "type": "debug",
-        "z": "ed5a922bb126bd97",
-        "name": "iPowerInfrared2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 580,
-        "y": 160,
-        "wires": []
-    },
-    {
         "id": "b382369e19c81afa",
         "type": "function",
         "z": "ed5a922bb126bd97",
-        "name": "Set Variables",
+        "name": "Set Global Variable",
         "func": "var iPowerInfrared3 = msg.payload;\nglobal.set(\"iPowerInfrared3\", iPowerInfrared3);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
@@ -391,12 +380,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
+        "x": 370,
         "y": 220,
         "wires": [
-            [
-                "6edec28560b8217b"
-            ]
+            []
         ]
     },
     {
@@ -422,10 +409,50 @@
         ]
     },
     {
-        "id": "6edec28560b8217b",
+        "id": "ccd93a529a1e183e",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iBuildPlatformCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iBuildPlatformCurrent",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "6f34985467b664f2"
+            ]
+        ]
+    },
+    {
+        "id": "6f34985467b664f2",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iBuildPlatformCurrent = msg.payload;\nglobal.set(\"iBuildPlatformCurrent\", iBuildPlatformCurrent);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3babe7c99581d022",
         "type": "debug",
         "z": "ed5a922bb126bd97",
-        "name": "iPowerInfrared3",
+        "name": "Debug needed Variable",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -434,8 +461,208 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 580,
-        "y": 220,
+        "x": 910,
+        "y": 200,
         "wires": []
+    },
+    {
+        "id": "f2563b9df2d98a3c",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iReservoirPlatformCurrent = msg.payload;\nglobal.set(\"iReservoirPlatformCurrent\", iReservoirPlatformCurrent);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f6cf8ba8c745cdaa",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iReservoirPlatformCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iReservoirPlatformCurrent",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "f2563b9df2d98a3c"
+            ]
+        ]
+    },
+    {
+        "id": "085cff276f6467eb",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iNozzelXAxisCurrent = msg.payload;\nglobal.set(\"iNozzelXAxisCurrent\", iNozzelXAxisCurrent);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "77aadc74bf0286f3",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iNozzelXAxisCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iNozzelXAxisCurrent",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 130,
+        "y": 420,
+        "wires": [
+            [
+                "085cff276f6467eb"
+            ]
+        ]
+    },
+    {
+        "id": "442765716c1e0a5a",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iNozzleYAxisCurrent = msg.payload;\nglobal.set(\"iNozzleYAxisCurrent\", iNozzleYAxisCurrent);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d779d8232ec7502c",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iNozzleYAxisCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iNozzleYAxisCurrent",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 130,
+        "y": 480,
+        "wires": [
+            [
+                "442765716c1e0a5a"
+            ]
+        ]
+    },
+    {
+        "id": "840f55f6b9e336b5",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iDoctorBladeCurrent = msg.payload;\nglobal.set(\"iDoctorBladeCurrent\", iDoctorBladeCurrent);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a8ebd9bf19b6bf53",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iDoctorBladeCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iDoctorBladeCurrent",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 130,
+        "y": 540,
+        "wires": [
+            [
+                "840f55f6b9e336b5"
+            ]
+        ]
+    },
+    {
+        "id": "02552fb901896a7d",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iFiberTransportIntegrationUnitCurrent = msg.payload;\nglobal.set(\"iFiberTransportIntegrationUnitCurrent\", iFiberTransportIntegrationUnitCurrent);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "174023da4eb855cc",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iFiberTransportIntegrationUnitCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iFiberTransportIntegrationUnitCurrent",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 190,
+        "y": 600,
+        "wires": [
+            [
+                "02552fb901896a7d"
+            ]
+        ]
     }
 ]
