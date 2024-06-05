@@ -87,62 +87,6 @@
         "bareClient": false
     },
     {
-        "id": "2c677e7d6676438b",
-        "type": "debug",
-        "z": "3155fc29ace33dcb",
-        "name": "debug 2",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 740,
-        "y": 140,
-        "wires": []
-    },
-    {
-        "id": "6ee74b4ddc4656ef",
-        "type": "influxdb out",
-        "z": "3155fc29ace33dcb",
-        "influxdb": "19d3d373c748b635",
-        "name": "InfluxDB",
-        "measurement": "Test",
-        "precision": "",
-        "retentionPolicy": "",
-        "database": "database",
-        "precisionV18FluxV20": "ms",
-        "retentionPolicyV18Flux": "",
-        "org": "KIT",
-        "bucket": "SLS_Data",
-        "x": 740,
-        "y": 200,
-        "wires": []
-    },
-    {
-        "id": "bc8efa2f0c30955b",
-        "type": "function",
-        "z": "3155fc29ace33dcb",
-        "name": "Set Data for InfluxDB",
-        "func": "msg.topic=\"InfluxData\"\nvar powerInfrared1=global.get(\"iPowerInfrared1\")\nvar timestamp = Date.now()\nvar powerInfrared = powerInfrared1\nvar process = 0\nvar component = 10\nmsg.payload={\n    \"timestamp\" : timestamp,\n    \"powerInfared\" : powerInfrared,\n    \"process\" : process,\n    \"component\" : component\n}\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 540,
-        "y": 200,
-        "wires": [
-            [
-                "2c677e7d6676438b",
-                "6ee74b4ddc4656ef"
-            ]
-        ]
-    },
-    {
         "id": "f6c8b81ea62a84e7",
         "type": "influxdb batch",
         "z": "3155fc29ace33dcb",
@@ -155,29 +99,9 @@
         "retentionPolicyV18Flux": "",
         "org": "KIT",
         "bucket": "SLS_Data",
-        "x": 820,
-        "y": 40,
-        "wires": []
-    },
-    {
-        "id": "966e8c40bf2ac949",
-        "type": "function",
-        "z": "3155fc29ace33dcb",
-        "name": "Set Message Format",
-        "func": "msg.payload = [\n    {\n        measurement: \"Power\",\n        fields: {\n            powerHeatingMat1: 5.5,\n            powerHeatingMat2: 10,\n            powerNozzle: 15\n        },\n        tags:{\n            process:\"Sintern\",\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
         "x": 600,
         "y": 40,
-        "wires": [
-            [
-                "f6c8b81ea62a84e7"
-            ]
-        ]
+        "wires": []
     },
     {
         "id": "bd8c4fa4632e8aee",
@@ -193,15 +117,15 @@
                 "vt": "str"
             }
         ],
-        "repeat": "",
+        "repeat": "2",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 140,
-        "y": 40,
+        "x": 150,
+        "y": 80,
         "wires": [
             [
                 "0895be440011be08"
@@ -213,43 +137,19 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Power Calculation",
-        "func": "// Infrarotheizung\n\n// Heizmatte 1 (Bauplattform)\n\n// Heizmatte 2 (Pulverplattform)\n\n// Heizmatte 3 (Faserintegration)\n\n// Düsenheizung\n\n// Laser\n\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\n\n// Motor 2 (Vorratsplattform)\n\n// Motor 3 (Düse X-Achse)\n\n// Motor 4 (Düse Y-Achse)\n\n// Motor 5 (Rakel)\n\n// Motor 6 (Faservorschub)\nreturn msg;",
+        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"));\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"));\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"));\nvar powerInfrared = powerInfrared1 + powerInfrared2 + powerInfrared3\n// Heizmatte 1 (Bauplattform)\nvar powerHeatingMat1 = 7\n// Heizmatte 2 (Pulverplattform)\nvar powerHeatingMat2 = 7\n// Heizmatte 3 (Faserintegration)\nvar powerHeatingMat3 = 7\n// Düsenheizung\nvar powerHeatingNozzle = 8\n// Laser\nvar powerLaser = 4\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230\n\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230\n\nmsg.payload = [\n    {\n        measurement: \"Power\",\n        fields: {\n            powerInfrared:powerInfrared,\n            powerHeatingMat1:powerHeatingMat1,\n            powerHeatingMat2:powerHeatingMat2,\n            powerHeatingMat3:powerHeatingMat3,\n            powerHeatingNozzle:powerHeatingNozzle,\n            powerLaser:powerLaser,\n            powerMotor1:powerMotor1,\n            powerMotor2:powerMotor2,\n            powerMotor3:powerMotor3,\n            powerMotor4:powerMotor4,\n            powerMotor5:powerMotor5,\n            powerMotor6:powerMotor6\n        },\n        tags:{\n            process:\"Sintern\",\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 40,
+        "x": 390,
+        "y": 80,
         "wires": [
             [
-                "966e8c40bf2ac949"
-            ]
-        ]
-    },
-    {
-        "id": "7004d7ff56d54fe9",
-        "type": "inject",
-        "z": "3155fc29ace33dcb",
-        "name": "Send Data to InfluxDB",
-        "props": [
-            {
-                "p": "payload"
-            }
-        ],
-        "repeat": "",
-        "crontab": "",
-        "once": false,
-        "onceDelay": 0.1,
-        "topic": "",
-        "payload": "",
-        "payloadType": "date",
-        "x": 140,
-        "y": 200,
-        "wires": [
-            [
-                "bc8efa2f0c30955b"
+                "6cc982fa45d84a4d",
+                "f6c8b81ea62a84e7"
             ]
         ]
     },
@@ -265,14 +165,207 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 380,
-        "y": 300,
+        "x": 400,
+        "y": 220,
         "wires": [
             []
         ]
     },
     {
         "id": "6c2597ba69501fee",
+        "type": "function",
+        "z": "3155fc29ace33dcb",
+        "name": "Temperature Monitoring",
+        "func": "// Temperatur Gehäuse\nvar tempBuilding = global.get(\"iPT100_Building\")\n// Temperatur Düse\nvar tempNozzle = global.get(\"iPT100_Nozzle\")\n// Temperatur Faserintegrationseinheit\nvar tempFaser = global.get(\"iPT100_Fiber\")\n// Temperature Pulveroberfläche\nvar tempSurface = global.get(\"rTemperatureSurface\")\n\nmsg.payload = [\n    {\n        measurement: \"Temperature\",\n        fields: {\n            tempBuilding:tempBuilding,\n            tempNozzle:tempNozzle,\n            tempFaser:tempFaser,\n            tempSurface:tempSurface\n        },\n        tags:{\n            process:\"Sintern\",\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 380,
+        "wires": [
+            [
+                "9db33c57dcb77e80",
+                "8b7bd0d68c046b50"
+            ]
+        ]
+    },
+    {
+        "id": "6cc982fa45d84a4d",
+        "type": "debug",
+        "z": "3155fc29ace33dcb",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "a3bb0340e0a914aa",
+        "type": "inject",
+        "z": "3155fc29ace33dcb",
+        "name": "Send Data to InfluxDB",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "a031969e1282aa23"
+            ]
+        ]
+    },
+    {
+        "id": "d68cb4af46af98cc",
+        "type": "influxdb batch",
+        "z": "3155fc29ace33dcb",
+        "influxdb": "19d3d373c748b635",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "InfluxDB Batch",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "KIT",
+        "bucket": "SLS_Data",
+        "x": 620,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "e970d75db2b2b3ae",
+        "type": "debug",
+        "z": "3155fc29ace33dcb",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 600,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "673b1558530a83f5",
+        "type": "inject",
+        "z": "3155fc29ace33dcb",
+        "name": "Send Data to InfluxDB",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 380,
+        "wires": [
+            [
+                "6c2597ba69501fee"
+            ]
+        ]
+    },
+    {
+        "id": "8b7bd0d68c046b50",
+        "type": "influxdb batch",
+        "z": "3155fc29ace33dcb",
+        "influxdb": "19d3d373c748b635",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "InfluxDB Batch",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "KIT",
+        "bucket": "SLS_Data",
+        "x": 640,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "9db33c57dcb77e80",
+        "type": "debug",
+        "z": "3155fc29ace33dcb",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a7713f01a6a72562",
+        "type": "inject",
+        "z": "3155fc29ace33dcb",
+        "name": "Send Data to InfluxDB",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 540,
+        "wires": [
+            [
+                "3271dbdc818b6471"
+            ]
+        ]
+    },
+    {
+        "id": "3271dbdc818b6471",
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Process Monitoring",
@@ -283,11 +376,45 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 380,
+        "x": 390,
+        "y": 540,
         "wires": [
             []
         ]
+    },
+    {
+        "id": "1246c50191855216",
+        "type": "debug",
+        "z": "3155fc29ace33dcb",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "de663d947aedac7f",
+        "type": "influxdb batch",
+        "z": "3155fc29ace33dcb",
+        "influxdb": "19d3d373c748b635",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "InfluxDB Batch",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "KIT",
+        "bucket": "SLS_Data",
+        "x": 600,
+        "y": 480,
+        "wires": []
     },
     {
         "id": "e8634bdf5693be6f",
@@ -327,7 +454,7 @@
         "type": "function",
         "z": "ed5a922bb126bd97",
         "name": "Set Global Variable",
-        "func": "var iPowerInfrared1 = msg.payload;\nglobal.set(\"iPowerInfrared1\", iPowerInfrared1);\nreturn msg;",
+        "func": "global.set(\"iPowerInfrared1\", msg.payload);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -337,9 +464,7 @@
         "x": 370,
         "y": 100,
         "wires": [
-            [
-                "3babe7c99581d022"
-            ]
+            []
         ]
     },
     {
@@ -369,7 +494,7 @@
         "type": "function",
         "z": "ed5a922bb126bd97",
         "name": "Set Global Variable",
-        "func": "var iPowerInfrared2 = msg.payload;\nglobal.set(\"iPowerInfrared2\", iPowerInfrared2);\nreturn msg;",
+        "func": "global.set(\"iPowerInfrared2\", msg.payload);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -377,7 +502,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 160,
+        "y": 200,
         "wires": [
             []
         ]
@@ -397,7 +522,7 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 120,
-        "y": 160,
+        "y": 200,
         "wires": [
             [
                 "8506b4ce4abd3ff7"
@@ -409,7 +534,7 @@
         "type": "function",
         "z": "ed5a922bb126bd97",
         "name": "Set Global Variable",
-        "func": "var iPowerInfrared3 = msg.payload;\nglobal.set(\"iPowerInfrared3\", iPowerInfrared3);\nreturn msg;",
+        "func": "global.set(\"iPowerInfrared3\", msg.payload);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -417,7 +542,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 220,
+        "y": 320,
         "wires": [
             []
         ]
@@ -437,7 +562,7 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 120,
-        "y": 220,
+        "y": 320,
         "wires": [
             [
                 "b382369e19c81afa"
@@ -459,7 +584,7 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 140,
-        "y": 300,
+        "y": 460,
         "wires": [
             [
                 "6f34985467b664f2"
@@ -479,7 +604,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 300,
+        "y": 460,
         "wires": [
             []
         ]
@@ -514,7 +639,7 @@
         "finalize": "",
         "libs": [],
         "x": 390,
-        "y": 360,
+        "y": 580,
         "wires": [
             []
         ]
@@ -534,7 +659,7 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 150,
-        "y": 360,
+        "y": 580,
         "wires": [
             [
                 "f2563b9df2d98a3c"
@@ -546,7 +671,7 @@
         "type": "function",
         "z": "ed5a922bb126bd97",
         "name": "Set Global Variable",
-        "func": "var iNozzelXAxisCurrent = msg.payload;\nglobal.set(\"iNozzelXAxisCurrent\", iNozzelXAxisCurrent);\nreturn msg;",
+        "func": "var iNozzleXAxisCurrent = msg.payload;\nglobal.set(\"iNozzleXAxisCurrent\", iNozzleXAxisCurrent);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -554,7 +679,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 420,
+        "y": 700,
         "wires": [
             []
         ]
@@ -563,9 +688,9 @@
         "id": "77aadc74bf0286f3",
         "type": "ads-client-subscribe",
         "z": "ed5a922bb126bd97",
-        "name": "iNozzelXAxisCurrent",
+        "name": "iNozzleXAxisCurrent",
         "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iNozzelXAxisCurrent",
+        "variableName": "GVL_Standard.iNozzleXAxisCurrent",
         "cycleTime": 200,
         "mode": "onchange",
         "initialDelay": 0,
@@ -574,7 +699,7 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 130,
-        "y": 420,
+        "y": 700,
         "wires": [
             [
                 "085cff276f6467eb"
@@ -594,7 +719,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 480,
+        "y": 820,
         "wires": [
             []
         ]
@@ -614,7 +739,7 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 130,
-        "y": 480,
+        "y": 820,
         "wires": [
             [
                 "442765716c1e0a5a"
@@ -634,7 +759,7 @@
         "finalize": "",
         "libs": [],
         "x": 370,
-        "y": 540,
+        "y": 940,
         "wires": [
             []
         ]
@@ -654,7 +779,7 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 130,
-        "y": 540,
+        "y": 940,
         "wires": [
             [
                 "840f55f6b9e336b5"
@@ -674,7 +799,7 @@
         "finalize": "",
         "libs": [],
         "x": 470,
-        "y": 600,
+        "y": 1060,
         "wires": [
             []
         ]
@@ -694,10 +819,547 @@
         "resubscribeTimeout": 2000,
         "inputs": 0,
         "x": 190,
-        "y": 600,
+        "y": 1060,
         "wires": [
             [
                 "02552fb901896a7d"
+            ]
+        ]
+    },
+    {
+        "id": "577224338009d66c",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared1",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "5",
+        "payloadType": "num",
+        "x": 130,
+        "y": 160,
+        "wires": [
+            [
+                "fa8eff2047e11308"
+            ]
+        ]
+    },
+    {
+        "id": "8f1ed3a433d7a1c6",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared2",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "5",
+        "payloadType": "str",
+        "x": 130,
+        "y": 260,
+        "wires": [
+            [
+                "8506b4ce4abd3ff7"
+            ]
+        ]
+    },
+    {
+        "id": "3ae6101bc0f590db",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared3",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "5",
+        "payloadType": "num",
+        "x": 130,
+        "y": 380,
+        "wires": [
+            [
+                "b382369e19c81afa"
+            ]
+        ]
+    },
+    {
+        "id": "f504386055443142",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iBuildPlatformCurrent",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0.1",
+        "payloadType": "num",
+        "x": 140,
+        "y": 520,
+        "wires": [
+            [
+                "6f34985467b664f2"
+            ]
+        ]
+    },
+    {
+        "id": "6195c5ec94b22b6d",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iReservoirPlatformCurrent",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0.2",
+        "payloadType": "num",
+        "x": 160,
+        "y": 640,
+        "wires": [
+            [
+                "f2563b9df2d98a3c"
+            ]
+        ]
+    },
+    {
+        "id": "fda25c8fcd58a254",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iNozzleXAxisCurrent",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0.1",
+        "payloadType": "num",
+        "x": 140,
+        "y": 760,
+        "wires": [
+            [
+                "085cff276f6467eb"
+            ]
+        ]
+    },
+    {
+        "id": "d1860b2cfd40c4be",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iNozzleYAxisCurrent",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0.1",
+        "payloadType": "num",
+        "x": 140,
+        "y": 880,
+        "wires": [
+            [
+                "442765716c1e0a5a"
+            ]
+        ]
+    },
+    {
+        "id": "812754e434c7c114",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iDoctorBladeCurrent",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0.2",
+        "payloadType": "num",
+        "x": 140,
+        "y": 1000,
+        "wires": [
+            [
+                "840f55f6b9e336b5"
+            ]
+        ]
+    },
+    {
+        "id": "a43477d33f8b5542",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iFiberTransportIntegrationUnitCurrent",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "0.1",
+        "payloadType": "num",
+        "x": 190,
+        "y": 1120,
+        "wires": [
+            [
+                "02552fb901896a7d"
+            ]
+        ]
+    },
+    {
+        "id": "917f59d9ee2ca4d2",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iPT100_Building = msg.payload;\nglobal.set(\"iPT100_Building\", iPT100_Building);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b46c87ee506584d2",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iPT100_Building",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iPT100_Building",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 120,
+        "y": 1180,
+        "wires": [
+            [
+                "917f59d9ee2ca4d2"
+            ]
+        ]
+    },
+    {
+        "id": "d918739fa77106ba",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iPT100_Building",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "40",
+        "payloadType": "num",
+        "x": 130,
+        "y": 1240,
+        "wires": [
+            [
+                "917f59d9ee2ca4d2"
+            ]
+        ]
+    },
+    {
+        "id": "ba7e0b60aff21ddb",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iPT100_Nozzle = msg.payload;\nglobal.set(\"iPT100_Nozzle\", iPT100_Nozzle);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 1300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a464dfeadbb2e473",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iPT100_Nozzle",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iPT100_Nozzle",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 120,
+        "y": 1300,
+        "wires": [
+            [
+                "ba7e0b60aff21ddb"
+            ]
+        ]
+    },
+    {
+        "id": "d04a0cbc5b9f4b29",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iPT100_Nozzle",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "100",
+        "payloadType": "num",
+        "x": 120,
+        "y": 1360,
+        "wires": [
+            [
+                "ba7e0b60aff21ddb"
+            ]
+        ]
+    },
+    {
+        "id": "7571ea3c94ec3ab7",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iPT100_Fiber = msg.payload;\nglobal.set(\"iPT100_Fiber\", iPT100_Fiber);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 1420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6f125dfc69c2c634",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "iPT100_Fiber",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iPT100_Fiber",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 110,
+        "y": 1420,
+        "wires": [
+            [
+                "7571ea3c94ec3ab7"
+            ]
+        ]
+    },
+    {
+        "id": "6e0f8f23a08b191f",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "iPT100_Fiber",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "80",
+        "payloadType": "num",
+        "x": 120,
+        "y": 1480,
+        "wires": [
+            [
+                "7571ea3c94ec3ab7"
+            ]
+        ]
+    },
+    {
+        "id": "6f21f6942cf59fe3",
+        "type": "ads-client-subscribe",
+        "z": "ed5a922bb126bd97",
+        "name": "rTemperatureSurface",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.rTemperatureSurface",
+        "cycleTime": 200,
+        "mode": "onchange",
+        "initialDelay": 0,
+        "retryInterval": 2000,
+        "controlSubscription": false,
+        "resubscribeTimeout": 2000,
+        "inputs": 0,
+        "x": 140,
+        "y": 1540,
+        "wires": [
+            [
+                "6eafa036096de8a4"
+            ]
+        ]
+    },
+    {
+        "id": "6eafa036096de8a4",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var rTemperatureSurface = msg.payload;\nglobal.set(\"rTemperatureSurface\", rTemperatureSurface);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 1540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5afc060a4953a149",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "rTemperatureSurface",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "2",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "70",
+        "payloadType": "num",
+        "x": 140,
+        "y": 1600,
+        "wires": [
+            [
+                "6eafa036096de8a4"
             ]
         ]
     }
