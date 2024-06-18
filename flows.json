@@ -30,7 +30,7 @@
         "routerAddress": "172.22.168.11",
         "localAddress": "",
         "localTcpPort": "",
-        "localAmsNetId": "172.22.168.240.1.1",
+        "localAmsNetId": "172.22.168.61.1.1",
         "localAdsPort": "32750",
         "timeoutDelay": "",
         "hideConsoleWarnings": false,
@@ -424,7 +424,7 @@
         "connection": "3953286b03d613bb",
         "showInput": false,
         "inputs": 0,
-        "x": 120,
+        "x": 400,
         "y": 40,
         "wires": [
             [
@@ -445,7 +445,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 360,
+        "x": 640,
         "y": 40,
         "wires": []
     },
@@ -461,32 +461,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 100,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "8ab2c2e0780deec9",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iPowerInfrared1",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iPowerInfrared1",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 120,
-        "y": 100,
-        "wires": [
-            [
-                "fa8eff2047e11308"
-            ]
         ]
     },
     {
@@ -501,32 +479,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 200,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "5b0a7bbcf9b15cdf",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iPowerInfrared2",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iPowerInfrared2",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 120,
-        "y": 200,
-        "wires": [
-            [
-                "8506b4ce4abd3ff7"
-            ]
         ]
     },
     {
@@ -541,54 +497,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 320,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "f2f7862ed5b90ef7",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iPowerInfrared3",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iPowerInfrared3",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 120,
-        "y": 320,
-        "wires": [
-            [
-                "b382369e19c81afa"
-            ]
-        ]
-    },
-    {
-        "id": "ccd93a529a1e183e",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iBuildPlatformCurrent",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iBuildPlatformCurrent",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 140,
-        "y": 460,
-        "wires": [
-            [
-                "6f34985467b664f2"
-            ]
         ]
     },
     {
@@ -603,7 +515,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 460,
         "wires": [
             []
@@ -638,32 +550,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 670,
         "y": 580,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "f6cf8ba8c745cdaa",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iReservoirPlatformCurrent",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iReservoirPlatformCurrent",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 150,
-        "y": 580,
-        "wires": [
-            [
-                "f2563b9df2d98a3c"
-            ]
         ]
     },
     {
@@ -678,32 +568,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 700,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "77aadc74bf0286f3",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iNozzleXAxisCurrent",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iNozzleXAxisCurrent",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 130,
-        "y": 700,
-        "wires": [
-            [
-                "085cff276f6467eb"
-            ]
         ]
     },
     {
@@ -718,32 +586,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 820,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "d779d8232ec7502c",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iNozzleYAxisCurrent",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iNozzleYAxisCurrent",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 130,
-        "y": 820,
-        "wires": [
-            [
-                "442765716c1e0a5a"
-            ]
         ]
     },
     {
@@ -758,32 +604,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 940,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "a8ebd9bf19b6bf53",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iDoctorBladeCurrent",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iDoctorBladeCurrent",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 130,
-        "y": 940,
-        "wires": [
-            [
-                "840f55f6b9e336b5"
-            ]
         ]
     },
     {
@@ -798,32 +622,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 470,
+        "x": 750,
         "y": 1060,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "174023da4eb855cc",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iFiberTransportIntegrationUnitCurrent",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iFiberTransportIntegrationUnitCurrent",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 190,
-        "y": 1060,
-        "wires": [
-            [
-                "02552fb901896a7d"
-            ]
         ]
     },
     {
@@ -847,7 +649,7 @@
         "topic": "",
         "payload": "5",
         "payloadType": "num",
-        "x": 130,
+        "x": 410,
         "y": 160,
         "wires": [
             [
@@ -876,7 +678,7 @@
         "topic": "",
         "payload": "5",
         "payloadType": "str",
-        "x": 130,
+        "x": 410,
         "y": 260,
         "wires": [
             [
@@ -905,7 +707,7 @@
         "topic": "",
         "payload": "5",
         "payloadType": "num",
-        "x": 130,
+        "x": 410,
         "y": 380,
         "wires": [
             [
@@ -934,7 +736,7 @@
         "topic": "",
         "payload": "0.1",
         "payloadType": "num",
-        "x": 140,
+        "x": 420,
         "y": 520,
         "wires": [
             [
@@ -963,7 +765,7 @@
         "topic": "",
         "payload": "0.2",
         "payloadType": "num",
-        "x": 160,
+        "x": 440,
         "y": 640,
         "wires": [
             [
@@ -992,7 +794,7 @@
         "topic": "",
         "payload": "0.1",
         "payloadType": "num",
-        "x": 140,
+        "x": 420,
         "y": 760,
         "wires": [
             [
@@ -1021,7 +823,7 @@
         "topic": "",
         "payload": "0.1",
         "payloadType": "num",
-        "x": 140,
+        "x": 420,
         "y": 880,
         "wires": [
             [
@@ -1050,7 +852,7 @@
         "topic": "",
         "payload": "0.2",
         "payloadType": "num",
-        "x": 140,
+        "x": 420,
         "y": 1000,
         "wires": [
             [
@@ -1079,7 +881,7 @@
         "topic": "",
         "payload": "0.1",
         "payloadType": "num",
-        "x": 190,
+        "x": 470,
         "y": 1120,
         "wires": [
             [
@@ -1099,32 +901,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
+        "x": 650,
         "y": 1180,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "b46c87ee506584d2",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iPT100_Building",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iPT100_Building",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 120,
-        "y": 1180,
-        "wires": [
-            [
-                "917f59d9ee2ca4d2"
-            ]
         ]
     },
     {
@@ -1148,7 +928,7 @@
         "topic": "",
         "payload": "40",
         "payloadType": "num",
-        "x": 130,
+        "x": 410,
         "y": 1240,
         "wires": [
             [
@@ -1168,32 +948,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
+        "x": 630,
         "y": 1300,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "a464dfeadbb2e473",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iPT100_Nozzle",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iPT100_Nozzle",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 120,
-        "y": 1300,
-        "wires": [
-            [
-                "ba7e0b60aff21ddb"
-            ]
         ]
     },
     {
@@ -1217,7 +975,7 @@
         "topic": "",
         "payload": "100",
         "payloadType": "num",
-        "x": 120,
+        "x": 400,
         "y": 1360,
         "wires": [
             [
@@ -1237,32 +995,10 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 350,
+        "x": 630,
         "y": 1420,
         "wires": [
             []
-        ]
-    },
-    {
-        "id": "6f125dfc69c2c634",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "iPT100_Fiber",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.iPT100_Fiber",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 110,
-        "y": 1420,
-        "wires": [
-            [
-                "7571ea3c94ec3ab7"
-            ]
         ]
     },
     {
@@ -1286,33 +1022,11 @@
         "topic": "",
         "payload": "80",
         "payloadType": "num",
-        "x": 120,
+        "x": 400,
         "y": 1480,
         "wires": [
             [
                 "7571ea3c94ec3ab7"
-            ]
-        ]
-    },
-    {
-        "id": "6f21f6942cf59fe3",
-        "type": "ads-client-subscribe",
-        "z": "ed5a922bb126bd97",
-        "name": "rTemperatureSurface",
-        "connection": "3953286b03d613bb",
-        "variableName": "GVL_Standard.rTemperatureSurface",
-        "cycleTime": 200,
-        "mode": "onchange",
-        "initialDelay": 0,
-        "retryInterval": 2000,
-        "controlSubscription": false,
-        "resubscribeTimeout": 2000,
-        "inputs": 0,
-        "x": 140,
-        "y": 1540,
-        "wires": [
-            [
-                "6eafa036096de8a4"
             ]
         ]
     },
@@ -1328,7 +1042,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
+        "x": 670,
         "y": 1540,
         "wires": [
             []
@@ -1355,11 +1069,247 @@
         "topic": "",
         "payload": "70",
         "payloadType": "num",
-        "x": 140,
+        "x": 420,
         "y": 1600,
         "wires": [
             [
                 "6eafa036096de8a4"
+            ]
+        ]
+    },
+    {
+        "id": "1f8859c8347ee8a0",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared1",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iPowerInfrared1",
+        "x": 400,
+        "y": 100,
+        "wires": [
+            [
+                "fa8eff2047e11308"
+            ]
+        ]
+    },
+    {
+        "id": "077a1a6f946dc4d9",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared2",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iPowerInfrared2",
+        "x": 400,
+        "y": 200,
+        "wires": [
+            [
+                "8506b4ce4abd3ff7"
+            ]
+        ]
+    },
+    {
+        "id": "41d48723cd2eb9ce",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iPowerInfrared3",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iPowerInfrared3",
+        "x": 400,
+        "y": 320,
+        "wires": [
+            [
+                "b382369e19c81afa"
+            ]
+        ]
+    },
+    {
+        "id": "edb3d9714431bb8f",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "rTemperatureSurface",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.rTemperatureSurface",
+        "x": 400,
+        "y": 1540,
+        "wires": [
+            [
+                "6eafa036096de8a4"
+            ]
+        ]
+    },
+    {
+        "id": "3acb13f3afa03248",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "rPT100_Fiber",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.rPT100_Fiber",
+        "x": 380,
+        "y": 1420,
+        "wires": [
+            [
+                "7571ea3c94ec3ab7"
+            ]
+        ]
+    },
+    {
+        "id": "843f7c93f5067d73",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "rPT100_Nozzle",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.rPT100_Nozzle",
+        "x": 380,
+        "y": 1300,
+        "wires": [
+            [
+                "ba7e0b60aff21ddb"
+            ]
+        ]
+    },
+    {
+        "id": "b39df9ad6344eb8d",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "rPT100_Building",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.rPT100_Building",
+        "x": 380,
+        "y": 1180,
+        "wires": [
+            [
+                "917f59d9ee2ca4d2"
+            ]
+        ]
+    },
+    {
+        "id": "745c7cddfb23ae8e",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iFiberTransportIntegrationUnitCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iFiberTransportIntegrationUnitCurrent",
+        "x": 450,
+        "y": 1060,
+        "wires": [
+            [
+                "02552fb901896a7d"
+            ]
+        ]
+    },
+    {
+        "id": "8a97c1983d92d397",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iDoctorBladeCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iDoctorBladeCurrent",
+        "x": 420,
+        "y": 940,
+        "wires": [
+            [
+                "840f55f6b9e336b5"
+            ]
+        ]
+    },
+    {
+        "id": "58178cea05beacdb",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iNozzleYAxisCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iNozzleYAxisCurrent",
+        "x": 400,
+        "y": 820,
+        "wires": [
+            [
+                "442765716c1e0a5a"
+            ]
+        ]
+    },
+    {
+        "id": "1ddb2299f543f696",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iNozzleXAxisCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iNozzleXAxisCurrent",
+        "x": 420,
+        "y": 700,
+        "wires": [
+            [
+                "085cff276f6467eb"
+            ]
+        ]
+    },
+    {
+        "id": "f31f605d5fb4e7a9",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iReservoirPlatformCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iReservoirPlatformCurrent",
+        "x": 430,
+        "y": 580,
+        "wires": [
+            [
+                "f2563b9df2d98a3c"
+            ]
+        ]
+    },
+    {
+        "id": "6f450b8360706f2e",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iBuildPlatformCurrent",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_IO.iBuildPlatformCurrent",
+        "x": 420,
+        "y": 460,
+        "wires": [
+            [
+                "6f34985467b664f2"
+            ]
+        ]
+    },
+    {
+        "id": "39af820d857a8ce2",
+        "type": "inject",
+        "z": "ed5a922bb126bd97",
+        "name": "Abfrageintervall",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 100,
+        "wires": [
+            [
+                "1f8859c8347ee8a0",
+                "077a1a6f946dc4d9",
+                "41d48723cd2eb9ce",
+                "6f450b8360706f2e",
+                "f31f605d5fb4e7a9",
+                "1ddb2299f543f696",
+                "58178cea05beacdb",
+                "8a97c1983d92d397",
+                "745c7cddfb23ae8e",
+                "b39df9ad6344eb8d",
+                "843f7c93f5067d73",
+                "3acb13f3afa03248",
+                "edb3d9714431bb8f"
             ]
         ]
     }
