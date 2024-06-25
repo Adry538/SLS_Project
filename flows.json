@@ -11,7 +11,7 @@
         "id": "ed5a922bb126bd97",
         "type": "tab",
         "label": "ADS-Anbindung",
-        "disabled": true,
+        "disabled": false,
         "info": "",
         "env": []
     },
@@ -19,7 +19,7 @@
         "id": "acbe6deed3bf2340",
         "type": "tab",
         "label": "[TEST] ADS-Anbindung",
-        "disabled": false,
+        "disabled": true,
         "info": "",
         "env": []
     },
@@ -213,9 +213,7 @@
         "x": 150,
         "y": 220,
         "wires": [
-            [
-                "a031969e1282aa23"
-            ]
+            []
         ]
     },
     {
