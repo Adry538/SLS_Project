@@ -513,7 +513,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "300",
+        "repeat": "",
         "crontab": "",
         "once": true,
         "onceDelay": 0.1,
