@@ -80,7 +80,7 @@
         "org": "KIT",
         "bucket": "SLS_Data",
         "x": 680,
-        "y": 220,
+        "y": 300,
         "wires": []
     },
     {
@@ -100,12 +100,12 @@
         "repeat": "5",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.2",
+        "onceDelay": "0.5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 260,
+        "y": 340,
         "wires": [
             [
                 "0895be440011be08"
@@ -117,7 +117,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Power Calculation",
-        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"));\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"));\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"));\nvar powerInfrared = powerInfrared1 + powerInfrared2 + powerInfrared3\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230\n\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\nmsg.payload = [\n    {\n        measurement: \"Power\",\n        fields: {\n            powerInfrared:powerInfrared,\n            powerHeatingMat1:powerHeatingMat1,\n            powerHeatingMat2:powerHeatingMat2,\n            powerHeatingMatFiber:powerHeatingMatFiber,\n            powerHeatingNozzle:powerHeatingNozzle,\n            powerLaser:powerLaser,\n            powerMotorBuild:powerMotor1,\n            powerMotorReservoir:powerMotor2,\n            powerMotorNozzleX:powerMotor3,\n            powerMotorNozzleY:powerMotor4,\n            powerMotorDoctor:powerMotor5,\n            powerMotorFiber:powerMotor6\n        },\n        tags:{\n            process:process,\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"));\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"));\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"));\nvar powerInfrared = powerInfrared1 + powerInfrared2 + powerInfrared3\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230\n\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Power\",\n        fields: {\n            powerInfrared:powerInfrared,\n            powerHeatingMat1:powerHeatingMat1,\n            powerHeatingMat2:powerHeatingMat2,\n            powerHeatingMatFiber:powerHeatingMatFiber,\n            powerHeatingNozzle:powerHeatingNozzle,\n            powerLaser:powerLaser,\n            powerMotorBuild:powerMotor1,\n            powerMotorReservoir:powerMotor2,\n            powerMotorNozzleX:powerMotor3,\n            powerMotorNozzleY:powerMotor4,\n            powerMotorDoctor:powerMotor5,\n            powerMotorFiber:powerMotor6\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -125,7 +125,7 @@
         "finalize": "",
         "libs": [],
         "x": 390,
-        "y": 260,
+        "y": 340,
         "wires": [
             [
                 "6cc982fa45d84a4d",
@@ -138,7 +138,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Material Calculation",
-        "func": "\nreturn msg;",
+        "func": "var powderWeight = parseFloat(global.get(\"powderWeight\"))\nvar powderVolume = parseFloat(global.get(\"powderVolume\"))\nvar fiberLength = parseFloat(global.get(\"fiberLength\"))\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Material\",\n        fields: {\n            powderWeight:powderWeight,\n            powderVolume:powderVolume,\n            fiberLength:fiberLength\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -146,9 +146,12 @@
         "finalize": "",
         "libs": [],
         "x": 400,
-        "y": 680,
+        "y": 760,
         "wires": [
-            []
+            [
+                "d68cb4af46af98cc",
+                "e970d75db2b2b3ae"
+            ]
         ]
     },
     {
@@ -156,7 +159,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Temperature Monitoring",
-        "func": "// Temperatur Gehäuse\nvar tempBuilding = global.get(\"rPT100_Building\")\n// Temperatur Düse\nvar tempNozzle = global.get(\"rPT100_Nozzle\")\n// Temperatur Faserintegrationseinheit\nvar tempFaser = global.get(\"rPT100_Fiber\")\n// Temperature Pulveroberfläche\nvar tempSurface = global.get(\"rTemperatureSurface\")\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\nmsg.payload = [\n    {\n        measurement: \"Temperature\",\n        fields: {\n            tempBuilding:tempBuilding,\n            tempNozzle:tempNozzle,\n            tempFaser:tempFaser,\n            tempSurface:tempSurface\n        },\n        tags:{\n            process:process,\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Temperatur Gehäuse\nvar tempBuilding = global.get(\"rPT100_Building\")\n// Temperatur Düse\nvar tempNozzle = global.get(\"rPT100_Nozzle\")\n// Temperatur Faserintegrationseinheit\nvar tempFaser = global.get(\"rPT100_Fiber\")\n// Temperature Pulveroberfläche\nvar tempSurface = global.get(\"rTemperatureSurface\")\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Temperature\",\n        fields: {\n            tempBuilding:tempBuilding,\n            tempNozzle:tempNozzle,\n            tempFaser:tempFaser,\n            tempSurface:tempSurface\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -164,7 +167,7 @@
         "finalize": "",
         "libs": [],
         "x": 410,
-        "y": 960,
+        "y": 1040,
         "wires": [
             [
                 "9db33c57dcb77e80",
@@ -186,7 +189,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 660,
-        "y": 300,
+        "y": 380,
         "wires": []
     },
     {
@@ -203,17 +206,19 @@
                 "vt": "str"
             }
         ],
-        "repeat": "5",
+        "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.2",
+        "onceDelay": "2",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
-        "y": 680,
+        "x": 140,
+        "y": 760,
         "wires": [
-            []
+            [
+                "a031969e1282aa23"
+            ]
         ]
     },
     {
@@ -230,7 +235,7 @@
         "org": "KIT",
         "bucket": "SLS_Data",
         "x": 680,
-        "y": 640,
+        "y": 720,
         "wires": []
     },
     {
@@ -247,7 +252,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 660,
-        "y": 720,
+        "y": 800,
         "wires": []
     },
     {
@@ -267,12 +272,12 @@
         "repeat": "5",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.2",
+        "onceDelay": "0.5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 960,
+        "y": 1040,
         "wires": [
             [
                 "6c2597ba69501fee"
@@ -293,7 +298,7 @@
         "org": "KIT",
         "bucket": "SLS_Data",
         "x": 680,
-        "y": 920,
+        "y": 1000,
         "wires": []
     },
     {
@@ -310,7 +315,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 660,
-        "y": 1000,
+        "y": 1080,
         "wires": []
     },
     {
@@ -330,12 +335,12 @@
         "repeat": "5",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.2",
+        "onceDelay": "0.5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 1100,
+        "y": 1180,
         "wires": [
             [
                 "3271dbdc818b6471"
@@ -347,7 +352,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Process Monitoring",
-        "func": "// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\nmsg.payload = [\n    {\n        measurement: \"Process Monitoring\",\n        fields: {\n            process:parseFloat(global.get(\"iStateTemperatrueControlling\"))\n        },\n        tags:{\n            process:process,\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Process Monitoring\",\n        fields: {\n            process:parseFloat(global.get(\"iStateTemperatrueControlling\"))\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -355,7 +360,7 @@
         "finalize": "",
         "libs": [],
         "x": 390,
-        "y": 1100,
+        "y": 1180,
         "wires": [
             [
                 "de663d947aedac7f",
@@ -377,7 +382,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 660,
-        "y": 1140,
+        "y": 1220,
         "wires": []
     },
     {
@@ -394,7 +399,7 @@
         "org": "KIT",
         "bucket": "SLS_Data",
         "x": 680,
-        "y": 1060,
+        "y": 1140,
         "wires": []
     },
     {
@@ -429,7 +434,7 @@
         "org": "KIT",
         "bucket": "SLS_Data",
         "x": 680,
-        "y": 360,
+        "y": 440,
         "wires": []
     },
     {
@@ -446,7 +451,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 660,
-        "y": 440,
+        "y": 520,
         "wires": []
     },
     {
@@ -454,7 +459,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Energy Calculation",
-        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"));\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"));\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"));\nvar energyInfrared = parseFloat(global.get(\"energyInfrared\")) + (powerInfrared1+powerInfrared2+powerInfrared3)*(5/3600);\nglobal.set(\"energyInfrared\", energyInfrared)\nvar emissionInfrared = energyInfrared * parseFloat(global.get(\"carbonIntensity\"));\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n    var energyHeatingMat1 = parseFloat(global.get(\"energyHeatingMat1\"))+(powerHeatingMat1 * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMat1\", energyHeatingMat1);\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n    var energyHeatingMat2 = parseFloat(global.get(\"energyHeatingMat2\"))+(powerHeatingMat2 * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMat2\", energyHeatingMat2);\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n    var energyHeatingMatFiber = parseFloat(global.get(\"energyHeatingMatFiber\"))+(powerHeatingMatFiber * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMatFiber\", energyHeatingMatFiber);\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n    var energyHeatingNozzle = parseFloat(global.get(\"energyHeatingNozzle\"))+(powerHeatingNozzle * (5 / 3600)); // Wh\n    global.set(\"energyHeatingNozzle\", energyHeatingNozzle);\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n    var energyLaser = parseFloat(global.get(\"energyLaser\"))+(powerLaser * (5 / 3600)); // Wh\n    global.set(\"energyLaser\",energyLaser);\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230;\nvar energyMotor1 = parseFloat(global.get(\"energyMotor1\"))+(powerMotor1 * (5/3600)); // Wh\nglobal.set(\"energyMotor1\",energyMotor1);\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230;\nvar energyMotor2 = parseFloat(global.get(\"energyMotor2\"))+(powerMotor2 * (5/3600)); // Wh\nglobal.set(\"energyMotor2\",energyMotor2);\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230;\nvar energyMotor3 = parseFloat(global.get(\"energyMotor3\"))+(powerMotor3 * (5/3600)); // Wh\nglobal.set(\"energyMotor3\",energyMotor3);\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230;\nvar energyMotor4 = parseFloat(global.get(\"energyMotor4\"))+(powerMotor4 * (5/3600)); // Wh\nglobal.set(\"energyMotor4\",energyMotor4);\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230;\nvar energyMotor5 = parseFloat(global.get(\"energyMotor5\"))+(powerMotor5 * (5/3600)); // Wh\nglobal.set(\"energyMotor5\",energyMotor5);\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230;\nvar energyMotor6 = parseFloat(global.get(\"energyMotor6\"))+(powerMotor6 * (5/3600)); // Wh\nglobal.set(\"energyMotor6\",energyMotor6);\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\nmsg.payload = [\n    {\n        measurement: \"Energy\",\n        fields: {\n            energyInfrared:energyInfrared,\n            energyHeatingMat1:energyHeatingMat1,\n            energyHeatingMat2:energyHeatingMat2,\n            energyHeatingMatFiber:energyHeatingMatFiber,\n            energyHeatingNozzle:energyHeatingNozzle,\n            energyLaser:energyLaser,\n            energyMotorBuild:energyMotor1,\n            energyMotorReservoir:energyMotor2,\n            energyMotorNozzleX:energyMotor3,\n            energyMotorNozzleY:energyMotor4,\n            energyMotorDoctor:energyMotor5,\n            energyMotorFiber:energyMotor6\n        },\n        tags:{\n            process:process,\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"));\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"));\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"));\nvar energyInfrared = parseFloat(global.get(\"energyInfrared\")) + (powerInfrared1+powerInfrared2+powerInfrared3)*(5/3600);\nglobal.set(\"energyInfrared\", energyInfrared)\nvar emissionInfrared = energyInfrared * parseFloat(global.get(\"carbonIntensity\"));\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n    var energyHeatingMat1 = parseFloat(global.get(\"energyHeatingMat1\"))+(powerHeatingMat1 * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMat1\", energyHeatingMat1);\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n    var energyHeatingMat2 = parseFloat(global.get(\"energyHeatingMat2\"))+(powerHeatingMat2 * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMat2\", energyHeatingMat2);\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n    var energyHeatingMatFiber = parseFloat(global.get(\"energyHeatingMatFiber\"))+(powerHeatingMatFiber * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMatFiber\", energyHeatingMatFiber);\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n    var energyHeatingNozzle = parseFloat(global.get(\"energyHeatingNozzle\"))+(powerHeatingNozzle * (5 / 3600)); // Wh\n    global.set(\"energyHeatingNozzle\", energyHeatingNozzle);\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n    var energyLaser = parseFloat(global.get(\"energyLaser\"))+(powerLaser * (5 / 3600)); // Wh\n    global.set(\"energyLaser\",energyLaser);\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230;\nvar energyMotor1 = parseFloat(global.get(\"energyMotor1\"))+(powerMotor1 * (5/3600)); // Wh\nglobal.set(\"energyMotor1\",energyMotor1);\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230;\nvar energyMotor2 = parseFloat(global.get(\"energyMotor2\"))+(powerMotor2 * (5/3600)); // Wh\nglobal.set(\"energyMotor2\",energyMotor2);\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230;\nvar energyMotor3 = parseFloat(global.get(\"energyMotor3\"))+(powerMotor3 * (5/3600)); // Wh\nglobal.set(\"energyMotor3\",energyMotor3);\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230;\nvar energyMotor4 = parseFloat(global.get(\"energyMotor4\"))+(powerMotor4 * (5/3600)); // Wh\nglobal.set(\"energyMotor4\",energyMotor4);\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230;\nvar energyMotor5 = parseFloat(global.get(\"energyMotor5\"))+(powerMotor5 * (5/3600)); // Wh\nglobal.set(\"energyMotor5\",energyMotor5);\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230;\nvar energyMotor6 = parseFloat(global.get(\"energyMotor6\"))+(powerMotor6 * (5/3600)); // Wh\nglobal.set(\"energyMotor6\",energyMotor6);\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Energy\",\n        fields: {\n            energyInfrared:energyInfrared,\n            energyHeatingMat1:energyHeatingMat1,\n            energyHeatingMat2:energyHeatingMat2,\n            energyHeatingMatFiber:energyHeatingMatFiber,\n            energyHeatingNozzle:energyHeatingNozzle,\n            energyLaser:energyLaser,\n            energyMotorBuild:energyMotor1,\n            energyMotorReservoir:energyMotor2,\n            energyMotorNozzleX:energyMotor3,\n            energyMotorNozzleY:energyMotor4,\n            energyMotorDoctor:energyMotor5,\n            energyMotorFiber:energyMotor6\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -462,7 +467,7 @@
         "finalize": "",
         "libs": [],
         "x": 390,
-        "y": 400,
+        "y": 480,
         "wires": [
             [
                 "319b10ab5bcab8c5",
@@ -487,12 +492,12 @@
         "repeat": "5",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.2",
+        "onceDelay": "0.5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 400,
+        "y": 480,
         "wires": [
             [
                 "373116f216ab147c"
@@ -526,7 +531,8 @@
             [
                 "5e52bdbe8fb1a36b",
                 "5a3fc5146f588100",
-                "b14b0b73f2335a9c"
+                "b14b0b73f2335a9c",
+                "49fc71c01c2a1451"
             ]
         ]
     },
@@ -625,12 +631,12 @@
         "repeat": "5",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.2",
+        "onceDelay": "0.5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "03f5c88fccd514d3"
@@ -642,7 +648,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Energy Emission Calculation",
-        "func": "// Infrarotheizung\nvar emissionInfrared = parseFloat(global.get(\"energyInfrared\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 1 (Bauplattform)\nvar emissionHeatingMat1= parseFloat(global.get(\"energyHeatingMat1\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 2 (Pulverplattform)\nvar emissionHeatingMat2= parseFloat(global.get(\"energyHeatingMat2\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 3 (Faserintegration)\nvar emissionHeatingMatFiber= parseFloat(global.get(\"energyHeatingMatFiber\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Düsenheizung\nvar emissionHeatingNozzle= parseFloat(global.get(\"energyHeatingNozzle\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Laser\nvar emissionLaser= parseFloat(global.get(\"energyLaser\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar emissionMotor1= parseFloat(global.get(\"energyMotor1\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 2 (Vorratsplattform)\nvar emissionMotor2= parseFloat(global.get(\"energyMotor2\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 3 (Düse X-Achse)\nvar emissionMotor3= parseFloat(global.get(\"energyMotor3\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 4 (Düse Y-Achse)\nvar emissionMotor4= parseFloat(global.get(\"energyMotor4\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 5 (Rakel)\nvar emissionMotor5= parseFloat(global.get(\"energyMotor5\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 6 (Faservorschub)\nvar emissionMotor6= parseFloat(global.get(\"energyMotor6\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\nmsg.payload = [\n    {\n        measurement: \"Energy Emissions\",\n        fields: {\n            emissionInfrared:emissionInfrared,\n            emissionHeatingMat1:emissionHeatingMat1,\n            emissionHeatingMat2:emissionHeatingMat2,\n            emissionHeatingMatFiber:emissionHeatingMatFiber,\n            emissionHeatingNozzle:emissionHeatingNozzle,\n            emissionLaser:emissionLaser,\n            emissionMotorBuild:emissionMotor1,\n            emissionMotorReservoir:emissionMotor2,\n            emissionMotorNozzleX:emissionMotor3,\n            emissionMotorNozzleY:emissionMotor4,\n            emissionMotorDoctor:emissionMotor5,\n            emissionMotorFiber:emissionMotor6\n        },\n        tags:{\n            process:process,\n            component:\"Bauteil XY\"\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Infrarotheizung\nvar emissionInfrared = parseFloat(global.get(\"energyInfrared\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 1 (Bauplattform)\nvar emissionHeatingMat1= parseFloat(global.get(\"energyHeatingMat1\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 2 (Pulverplattform)\nvar emissionHeatingMat2= parseFloat(global.get(\"energyHeatingMat2\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 3 (Faserintegration)\nvar emissionHeatingMatFiber= parseFloat(global.get(\"energyHeatingMatFiber\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Düsenheizung\nvar emissionHeatingNozzle= parseFloat(global.get(\"energyHeatingNozzle\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Laser\nvar emissionLaser= parseFloat(global.get(\"energyLaser\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar emissionMotor1= parseFloat(global.get(\"energyMotor1\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 2 (Vorratsplattform)\nvar emissionMotor2= parseFloat(global.get(\"energyMotor2\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 3 (Düse X-Achse)\nvar emissionMotor3= parseFloat(global.get(\"energyMotor3\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 4 (Düse Y-Achse)\nvar emissionMotor4= parseFloat(global.get(\"energyMotor4\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 5 (Rakel)\nvar emissionMotor5= parseFloat(global.get(\"energyMotor5\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 6 (Faservorschub)\nvar emissionMotor6= parseFloat(global.get(\"energyMotor6\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Energy Emissions\",\n        fields: {\n            emissionInfrared:emissionInfrared,\n            emissionHeatingMat1:emissionHeatingMat1,\n            emissionHeatingMat2:emissionHeatingMat2,\n            emissionHeatingMatFiber:emissionHeatingMatFiber,\n            emissionHeatingNozzle:emissionHeatingNozzle,\n            emissionLaser:emissionLaser,\n            emissionMotorBuild:emissionMotor1,\n            emissionMotorReservoir:emissionMotor2,\n            emissionMotorNozzleX:emissionMotor3,\n            emissionMotorNozzleY:emissionMotor4,\n            emissionMotorDoctor:emissionMotor5,\n            emissionMotorFiber:emissionMotor6\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -650,7 +656,7 @@
         "finalize": "",
         "libs": [],
         "x": 420,
-        "y": 540,
+        "y": 620,
         "wires": [
             [
                 "5964070911023324",
@@ -672,7 +678,7 @@
         "org": "KIT",
         "bucket": "SLS_Data",
         "x": 680,
-        "y": 500,
+        "y": 580,
         "wires": []
     },
     {
@@ -689,7 +695,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 660,
-        "y": 580,
+        "y": 660,
         "wires": []
     },
     {
@@ -705,7 +711,7 @@
         "finalize": "",
         "libs": [],
         "x": 430,
-        "y": 820,
+        "y": 900,
         "wires": [
             []
         ]
@@ -727,12 +733,12 @@
         "repeat": "5",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.2",
+        "onceDelay": "0.5",
         "topic": "",
         "payload": "",
         "payloadType": "date",
         "x": 150,
-        "y": 820,
+        "y": 900,
         "wires": [
             []
         ]
@@ -751,7 +757,7 @@
         "org": "KIT",
         "bucket": "SLS_Data",
         "x": 680,
-        "y": 780,
+        "y": 860,
         "wires": []
     },
     {
@@ -768,8 +774,87 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 660,
-        "y": 860,
+        "y": 940,
         "wires": []
+    },
+    {
+        "id": "5f4ba7b7ce99d4b8",
+        "type": "csv",
+        "z": "3155fc29ace33dcb",
+        "name": "Convert CSV",
+        "sep": ";",
+        "hdrin": "",
+        "hdrout": "none",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "powderWeight, powderVolume, fiberLength, component",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 530,
+        "y": 240,
+        "wires": [
+            [
+                "59f450b4addc90ae"
+            ]
+        ]
+    },
+    {
+        "id": "49fc71c01c2a1451",
+        "type": "file in",
+        "z": "3155fc29ace33dcb",
+        "name": "Read File",
+        "filename": "/Users/adriangrimm/Downloads/Input_Material.csv",
+        "filenameType": "str",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 320,
+        "y": 240,
+        "wires": [
+            [
+                "5f4ba7b7ce99d4b8"
+            ]
+        ]
+    },
+    {
+        "id": "7017b47d6977600a",
+        "type": "debug",
+        "z": "3155fc29ace33dcb",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1000,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "59f450b4addc90ae",
+        "type": "function",
+        "z": "3155fc29ace33dcb",
+        "name": "Set Material Variables",
+        "func": "global.set(\"powderWeight\", msg.payload.powderWeight);\nglobal.set(\"powderVolume\", msg.payload.powderVolume);\nglobal.set(\"fiberLength\", msg.payload.fiberLength);\nglobal.set(\"component\", msg.payload.component);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 780,
+        "y": 240,
+        "wires": [
+            [
+                "7017b47d6977600a"
+            ]
+        ]
     },
     {
         "id": "e8634bdf5693be6f",
