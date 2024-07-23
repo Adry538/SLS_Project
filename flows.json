@@ -352,7 +352,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Process Monitoring",
-        "func": "// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Process Monitoring\",\n        fields: {\n            process:parseFloat(global.get(\"iStateTemperatrueControlling\"))\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Genereller Maschinenstatus\nvar machineState = global.get(\"iGeneralMachineState\")\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\n// Aktuelle Schicht\nvar currentLayer = global.get(\"iCurrentLayer\")\n\n// Gesamtanzahl Schichten\nvar totalLayers = global.get(\"iTotalLayers\")\n\n\nmsg.payload = [\n    {\n        measurement: \"Process Monitoring\",\n        fields: {\n            machineState:machineState,\n            process:parseFloat(global.get(\"iStateTemperatrueControlling\")),\n            component:component,\n            currentLayer:currentLayer,\n            totalLayers:totalLayers\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -406,8 +406,8 @@
         "id": "b14b0b73f2335a9c",
         "type": "function",
         "z": "3155fc29ace33dcb",
-        "name": "Set EcoInvent Values",
-        "func": "\nreturn msg;",
+        "name": "Set Emission Values",
+        "func": "global.set(\"emissionPowder\", 6.9); // kg/kg, PA12\nglobal.set(\"emissionFiber\", 19.849); // kg/kg, 1k roving\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -703,7 +703,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Material Emission Calculation",
-        "func": "\nreturn msg;",
+        "func": "var emissionPowder = parseFloat(global.get(\"emissionPowder\")) * (parseFloat(global.get(\"weightPowder\"))/1000); // kg\nvar emissionFiber = parseFloat(global.get(\"emissionFiber\"));\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Material Emission\",\n        fields: {\n            emissionPowder:emissionPowder,\n            emissionFiber:emissionFiber\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -713,7 +713,10 @@
         "x": 430,
         "y": 900,
         "wires": [
-            []
+            [
+                "0cf5c0dea6eb8453",
+                "1ec5786b8cbca2e7"
+            ]
         ]
     },
     {
@@ -730,17 +733,19 @@
                 "vt": "str"
             }
         ],
-        "repeat": "5",
+        "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.5",
+        "onceDelay": "3",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
+        "x": 140,
         "y": 900,
         "wires": [
-            []
+            [
+                "047645cf0a9f4bbb"
+            ]
         ]
     },
     {
@@ -787,7 +792,7 @@
         "hdrout": "none",
         "multi": "one",
         "ret": "\\n",
-        "temp": "powderWeight, powderVolume, fiberLength, component",
+        "temp": "weightPowder, volumePowder, lengthFiber, component",
         "skip": "0",
         "strings": true,
         "include_empty_strings": "",
@@ -841,7 +846,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Set Material Variables",
-        "func": "global.set(\"powderWeight\", msg.payload.powderWeight);\nglobal.set(\"powderVolume\", msg.payload.powderVolume);\nglobal.set(\"fiberLength\", msg.payload.fiberLength);\nglobal.set(\"component\", msg.payload.component);\n\nreturn msg;",
+        "func": "global.set(\"weightPowder\", msg.payload.weightPowder); // g\nglobal.set(\"volumePowder\", msg.payload.volumePowder); // l\nglobal.set(\"lengthFiber\", msg.payload.lengthFiber); // cm\nglobal.set(\"component\", msg.payload.component);\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -855,6 +860,90 @@
                 "7017b47d6977600a"
             ]
         ]
+    },
+    {
+        "id": "014abca18116ab79",
+        "type": "function",
+        "z": "3155fc29ace33dcb",
+        "name": "Component Information",
+        "func": "\nmsg.payload = [\n    {\n        measurement: \"Component Info\",\n        fields: {\n            component:global.get(\"componentn\"),\n            volumePowder:global.get(\"volumePowder\"),\n            weightPowder:global.get(\"weightPowder\"),\n            lengthFiber:global.get(\"lengthFiber\"),\n            thicknessLayer:global.get(\"thicknessLayer\")\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 1320,
+        "wires": [
+            [
+                "8fb27e64bd2d2ddd",
+                "3ad7d13470a18eae"
+            ]
+        ]
+    },
+    {
+        "id": "5725caded0a2f29e",
+        "type": "inject",
+        "z": "3155fc29ace33dcb",
+        "name": "Send Data to InfluxDB",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "0.5",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 1320,
+        "wires": [
+            [
+                "014abca18116ab79"
+            ]
+        ]
+    },
+    {
+        "id": "8fb27e64bd2d2ddd",
+        "type": "influxdb batch",
+        "z": "3155fc29ace33dcb",
+        "influxdb": "19d3d373c748b635",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "InfluxDB Batch",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "KIT",
+        "bucket": "SLS_Data",
+        "x": 680,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "3ad7d13470a18eae",
+        "type": "debug",
+        "z": "3155fc29ace33dcb",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 1360,
+        "wires": []
     },
     {
         "id": "e8634bdf5693be6f",
@@ -1378,7 +1467,10 @@
                 "131bce551d106635",
                 "035d6e25f04c67ee",
                 "e29dbc010a7f0946",
-                "54c5af227d95cd43"
+                "54c5af227d95cd43",
+                "3a85ef273fcb6604",
+                "eb5156484047300f",
+                "bbf8dcf1c58af18f"
             ]
         ]
     },
@@ -1576,6 +1668,105 @@
         "libs": [],
         "x": 590,
         "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3a85ef273fcb6604",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iGeneralMachineState",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iGeneralMachineState",
+        "x": 420,
+        "y": 1240,
+        "wires": [
+            [
+                "7ac2405a9518f8e1"
+            ]
+        ]
+    },
+    {
+        "id": "eb5156484047300f",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iTotalLayers",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iTotalLayers",
+        "x": 390,
+        "y": 1300,
+        "wires": [
+            [
+                "d0b065f4786f450f"
+            ]
+        ]
+    },
+    {
+        "id": "bbf8dcf1c58af18f",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "iCurrentLayer",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.iCurrentLayer",
+        "x": 400,
+        "y": 1360,
+        "wires": [
+            [
+                "ddfceae1b4b27bfe"
+            ]
+        ]
+    },
+    {
+        "id": "7ac2405a9518f8e1",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iGeneralMachineState = msg.payload;\nglobal.set(\"iGeneralMachineState\", iGeneralMachineState);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0b065f4786f450f",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iTotalLayers = msg.payload;\nglobal.set(\"iTotalLayers\", iTotalLayers);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ddfceae1b4b27bfe",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var iCurrentLayer = msg.payload;\nglobal.set(\"iCurrentLayer\", iCurrentLayer);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1360,
         "wires": [
             []
         ]
@@ -2487,6 +2678,147 @@
         "wires": [
             [
                 "40656248ed4e7eea"
+            ]
+        ]
+    },
+    {
+        "id": "8558594fa249a323",
+        "type": "function",
+        "z": "acbe6deed3bf2340",
+        "name": "Set Global Variable",
+        "func": "var iGeneralMachineState = msg.payload;\nglobal.set(\"iGeneralMachineState\", iGeneralMachineState);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b471388716d7bd8e",
+        "type": "inject",
+        "z": "acbe6deed3bf2340",
+        "name": "iGeneralMachineState",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "1",
+        "payloadType": "num",
+        "x": 170,
+        "y": 1180,
+        "wires": [
+            [
+                "8558594fa249a323"
+            ]
+        ]
+    },
+    {
+        "id": "a858bd46a1835840",
+        "type": "function",
+        "z": "acbe6deed3bf2340",
+        "name": "Set Global Variable",
+        "func": "var iTotalLayers = msg.payload;\nglobal.set(\"iTotalLayers\", iTotalLayers);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8097bd732ec92fe6",
+        "type": "inject",
+        "z": "acbe6deed3bf2340",
+        "name": "iTotalLayers",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "120",
+        "payloadType": "num",
+        "x": 130,
+        "y": 1240,
+        "wires": [
+            [
+                "a858bd46a1835840"
+            ]
+        ]
+    },
+    {
+        "id": "9a06689c7629e5d7",
+        "type": "function",
+        "z": "acbe6deed3bf2340",
+        "name": "Set Global Variable",
+        "func": "var iCurrentLayer = msg.payload;\nglobal.set(\"iCurrentLayer\", iCurrentLayer);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fbe0ee78923f7442",
+        "type": "inject",
+        "z": "acbe6deed3bf2340",
+        "name": "iCurrentLayer",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "49",
+        "payloadType": "num",
+        "x": 140,
+        "y": 1300,
+        "wires": [
+            [
+                "9a06689c7629e5d7"
             ]
         ]
     }
