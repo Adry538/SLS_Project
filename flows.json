@@ -352,7 +352,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Process Monitoring",
-        "func": "// Genereller Maschinenstatus\nvar machineState = global.get(\"iGeneralMachineState\")\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\n// Aktuelle Schicht\nvar currentLayer = global.get(\"iCurrentLayer\")\n\n// Gesamtanzahl Schichten\nvar totalLayers = global.get(\"iTotalLayers\")\n\n\nmsg.payload = [\n    {\n        measurement: \"Process Monitoring\",\n        fields: {\n            machineState:machineState,\n            process:parseFloat(global.get(\"iStateTemperatrueControlling\")),\n            component:component,\n            currentLayer:currentLayer,\n            totalLayers:totalLayers\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Genereller Maschinenstatus\nvar machineState = global.get(\"iGeneralMachineState\")\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\n// Aktuelle Schicht\nvar currentLayer = global.get(\"iCurrentLayer\")\n\n// Gesamtanzahl Schichten\nvar totalLayers = global.get(\"iTotalLayers\")\n\n// Aktueller Prozess in Diagramm anzeigen\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var idle = 1;\n        var heatUp = 0;\n        var coolDown = 0;\n        var fiberIntegration = 0;\n        break;\n    case 1:\n        var idle = 0;\n        var heatUp = 1;\n        var coolDown = 0;\n        var fiberIntegration = 0;\n        break;\n    case 2:\n        var idle = 0;\n        var heatUp = 0;\n        var coolDown = 1;\n        var fiberIntegration = 0;\n        break;\n    case 3:\n        var idle = 0;\n        var heatUp = 0;\n        var coolDown = 0;\n        var fiberIntegration = 1;\n        break;\n}\n\nmsg.payload = [\n    {\n        measurement: \"Process Monitoring\",\n        fields: {\n            machineState:machineState,\n            process:parseFloat(global.get(\"iStateTemperatrueControlling\")),\n            component:component,\n            currentLayer:currentLayer,\n            totalLayers:totalLayers,\n            idle:idle,\n            heatUp:heatUp,\n            coolDown:coolDown,\n            fiberIntegration:fiberIntegration\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -788,11 +788,11 @@
         "z": "3155fc29ace33dcb",
         "name": "Convert CSV",
         "sep": ";",
-        "hdrin": "",
+        "hdrin": true,
         "hdrout": "none",
         "multi": "one",
         "ret": "\\n",
-        "temp": "weightPowder, volumePowder, lengthFiber, component",
+        "temp": "",
         "skip": "0",
         "strings": true,
         "include_empty_strings": "",
@@ -846,7 +846,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Set Material Variables",
-        "func": "global.set(\"weightPowder\", msg.payload.weightPowder); // g\nglobal.set(\"volumePowder\", msg.payload.volumePowder); // l\nglobal.set(\"lengthFiber\", msg.payload.lengthFiber); // cm\nglobal.set(\"component\", msg.payload.component);\n\nreturn msg;",
+        "func": "global.set(\"weightPowder\", msg.payload.weightPowder); // g\nglobal.set(\"volumePowder\", msg.payload.volumePowder); // l\nglobal.set(\"lengthFiber\", msg.payload.lengthFiber); // cm\nglobal.set(\"component\", msg.payload.component);\nglobal.set(\"crossSectionalAreaFiber\", 0.1);\nglobal.set(\"densityFiber\", 1.77); // g/cm3\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -866,7 +866,7 @@
         "type": "function",
         "z": "3155fc29ace33dcb",
         "name": "Component Information",
-        "func": "\nmsg.payload = [\n    {\n        measurement: \"Component Info\",\n        fields: {\n            component:global.get(\"componentn\"),\n            volumePowder:global.get(\"volumePowder\"),\n            weightPowder:global.get(\"weightPowder\"),\n            lengthFiber:global.get(\"lengthFiber\"),\n            thicknessLayer:global.get(\"thicknessLayer\")\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "\nmsg.payload = [\n    {\n        measurement: \"Component Info\",\n        fields: {\n            component:global.get(\"component\"),\n            volumePowder:global.get(\"volumePowder\"),\n            weightPowder:global.get(\"weightPowder\"),\n            lengthFiber:global.get(\"lengthFiber\"),\n            thicknessLayer:global.get(\"rLayerThickness\")\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -896,14 +896,14 @@
                 "vt": "str"
             }
         ],
-        "repeat": "5",
+        "repeat": "",
         "crontab": "",
         "once": true,
-        "onceDelay": "0.5",
+        "onceDelay": "1",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 150,
+        "x": 140,
         "y": 1320,
         "wires": [
             [
@@ -1470,7 +1470,8 @@
                 "54c5af227d95cd43",
                 "3a85ef273fcb6604",
                 "eb5156484047300f",
-                "bbf8dcf1c58af18f"
+                "bbf8dcf1c58af18f",
+                "33bfeb7cfda55271"
             ]
         ]
     },
@@ -1767,6 +1768,39 @@
         "libs": [],
         "x": 690,
         "y": 1360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "33bfeb7cfda55271",
+        "type": "ads-client-read-symbol",
+        "z": "ed5a922bb126bd97",
+        "name": "rLayerThickness",
+        "connection": "3953286b03d613bb",
+        "variableName": "GVL_Standard.rLayerThickness",
+        "x": 400,
+        "y": 1420,
+        "wires": [
+            [
+                "673e4010da19ac6c"
+            ]
+        ]
+    },
+    {
+        "id": "673e4010da19ac6c",
+        "type": "function",
+        "z": "ed5a922bb126bd97",
+        "name": "Set Global Variable",
+        "func": "var rLayerThickness = msg.payload;\nglobal.set(\"rLayerThickness\", rLayerThickness);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 690,
+        "y": 1420,
         "wires": [
             []
         ]
@@ -2820,6 +2854,53 @@
             [
                 "9a06689c7629e5d7"
             ]
+        ]
+    },
+    {
+        "id": "a399f6cc10ac29eb",
+        "type": "inject",
+        "z": "acbe6deed3bf2340",
+        "name": "rLayerThickness",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "5",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "2.5",
+        "payloadType": "num",
+        "x": 150,
+        "y": 1360,
+        "wires": [
+            [
+                "062477fa93e88624"
+            ]
+        ]
+    },
+    {
+        "id": "062477fa93e88624",
+        "type": "function",
+        "z": "acbe6deed3bf2340",
+        "name": "Set Global Variable",
+        "func": "var rLayerThickness = msg.payload;\nglobal.set(\"rLayerThickness\", rLayerThickness);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 450,
+        "y": 1360,
+        "wires": [
+            []
         ]
     }
 ]
