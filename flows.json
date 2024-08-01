@@ -69,7 +69,7 @@
     {
         "id": "f95007b3e4051e74",
         "type": "ads-client-connection",
-        "name": "SLS",
+        "name": "SLS3",
         "targetAmsNetId": "172.22.168.11.1.1",
         "targetAdsPort": "851",
         "objectifyEnumerations": true,
@@ -2065,7 +2065,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "5",
+        "payload": "1000",
         "payloadType": "num",
         "x": 150,
         "y": 40,
@@ -2094,7 +2094,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "5",
+        "payload": "300",
         "payloadType": "str",
         "x": 150,
         "y": 100,
@@ -2123,7 +2123,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "5",
+        "payload": "300",
         "payloadType": "num",
         "x": 150,
         "y": 160,
@@ -2181,7 +2181,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0.2",
+        "payload": "200",
         "payloadType": "num",
         "x": 180,
         "y": 580,
@@ -2210,7 +2210,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0.1",
+        "payload": "100",
         "payloadType": "num",
         "x": 160,
         "y": 640,
@@ -2239,7 +2239,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0.1",
+        "payload": "100",
         "payloadType": "num",
         "x": 160,
         "y": 700,
@@ -2268,7 +2268,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0.2",
+        "payload": "200",
         "payloadType": "num",
         "x": 160,
         "y": 760,
@@ -2297,7 +2297,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "payload": "0.1",
+        "payload": "100",
         "payloadType": "num",
         "x": 210,
         "y": 820,
@@ -2742,7 +2742,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 650,
         "y": 1120,
         "wires": [
             []
@@ -2762,7 +2762,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "5",
+        "repeat": "10",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
@@ -2773,7 +2773,7 @@
         "y": 1120,
         "wires": [
             [
-                "1d371620279e9644"
+                "285554861703976b"
             ]
         ]
     },
@@ -2789,7 +2789,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 450,
+        "x": 650,
         "y": 1180,
         "wires": [
             []
@@ -2809,7 +2809,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "5",
+        "repeat": "10",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
@@ -2820,7 +2820,7 @@
         "y": 1180,
         "wires": [
             [
-                "f10eb456d7eea007"
+                "815a203183e6d55c"
             ]
         ]
     },
@@ -2963,6 +2963,40 @@
         "y": 1360,
         "wires": [
             []
+        ]
+    },
+    {
+        "id": "815a203183e6d55c",
+        "type": "random",
+        "z": "2d46b82c2bafaf69",
+        "name": "",
+        "low": "0",
+        "high": "2",
+        "inte": "true",
+        "property": "payload",
+        "x": 440,
+        "y": 1180,
+        "wires": [
+            [
+                "f10eb456d7eea007"
+            ]
+        ]
+    },
+    {
+        "id": "285554861703976b",
+        "type": "random",
+        "z": "2d46b82c2bafaf69",
+        "name": "",
+        "low": "0",
+        "high": "4",
+        "inte": "true",
+        "property": "payload",
+        "x": 440,
+        "y": 1120,
+        "wires": [
+            [
+                "1d371620279e9644"
+            ]
         ]
     }
 ]
