@@ -1,6 +1,6 @@
 [
     {
-        "id": "3155fc29ace33dcb",
+        "id": "ac8c146e2c7dd888",
         "type": "tab",
         "label": "main",
         "disabled": false,
@@ -8,7 +8,7 @@
         "env": []
     },
     {
-        "id": "ed5a922bb126bd97",
+        "id": "b35df062de91c24c",
         "type": "tab",
         "label": "ADS-Anbindung",
         "disabled": true,
@@ -16,7 +16,7 @@
         "env": []
     },
     {
-        "id": "acbe6deed3bf2340",
+        "id": "2d46b82c2bafaf69",
         "type": "tab",
         "label": "[TEST] ADS-Anbindung",
         "disabled": false,
@@ -67,9 +67,65 @@
         "rejectUnauthorized": true
     },
     {
-        "id": "f6c8b81ea62a84e7",
+        "id": "f95007b3e4051e74",
+        "type": "ads-client-connection",
+        "name": "SLS",
+        "targetAmsNetId": "172.22.168.11.1.1",
+        "targetAdsPort": "851",
+        "objectifyEnumerations": true,
+        "convertDatesToJavascript": true,
+        "readAndCacheSymbols": false,
+        "readAndCacheDataTypes": false,
+        "disableSymbolVersionMonitoring": false,
+        "routerTcpPort": "48898",
+        "routerAddress": "172.22.168.11",
+        "localAddress": "",
+        "localTcpPort": "",
+        "localAmsNetId": "172.22.168.61.1.1",
+        "localAdsPort": "32750",
+        "timeoutDelay": "",
+        "hideConsoleWarnings": false,
+        "autoReconnect": true,
+        "reconnectInterval": "",
+        "checkStateInterval": "",
+        "connectionDownDelay": "",
+        "allowHalfOpen": false,
+        "disableBigInt": false,
+        "debuggingLevel": "",
+        "bareClient": false
+    },
+    {
+        "id": "cd493a44db01de24",
+        "type": "ads-client-connection",
+        "name": "SLS2",
+        "targetAmsNetId": "172.25.177.227.1.1",
+        "targetAdsPort": "851",
+        "objectifyEnumerations": true,
+        "convertDatesToJavascript": true,
+        "readAndCacheSymbols": false,
+        "readAndCacheDataTypes": false,
+        "disableSymbolVersionMonitoring": false,
+        "routerTcpPort": "",
+        "routerAddress": "",
+        "localAddress": "",
+        "localTcpPort": "",
+        "localAmsNetId": "",
+        "localAdsPort": "",
+        "timeoutDelay": "",
+        "hideConsoleWarnings": false,
+        "autoReconnect": true,
+        "reconnectInterval": "",
+        "checkStateInterval": "",
+        "connectionDownDelay": "",
+        "allowHalfOpen": false,
+        "disableBigInt": false,
+        "debuggingLevel": "",
+        "bareClient": false
+    },
+    {
+        "id": "74a9e8a59e7f0282",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -84,9 +140,9 @@
         "wires": []
     },
     {
-        "id": "bd8c4fa4632e8aee",
+        "id": "5249a4fc16b9c5e2",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -108,16 +164,16 @@
         "y": 340,
         "wires": [
             [
-                "0895be440011be08"
+                "63ef971823f00fc1"
             ]
         ]
     },
     {
-        "id": "0895be440011be08",
+        "id": "63ef971823f00fc1",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Power Calculation",
-        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"));\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"));\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"));\nvar powerInfrared = powerInfrared1 + powerInfrared2 + powerInfrared3\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230\n\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230\n\n// Gesamtleistung\nvar powerTotal=powerInfrared+powerHeatingMat1+powerHeatingMat2+powerHeatingMatFiber+powerHeatingNozzle+powerLaser+powerMotor1+powerMotor2+powerMotor3+powerMotor4+powerMotor5+powerMotor6;\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Power\",\n        fields: {\n            powerInfrared:powerInfrared,\n            powerHeatingMat1:powerHeatingMat1,\n            powerHeatingMat2:powerHeatingMat2,\n            powerHeatingMatFiber:powerHeatingMatFiber,\n            powerHeatingNozzle:powerHeatingNozzle,\n            powerLaser:powerLaser,\n            powerMotorBuild:powerMotor1,\n            powerMotorReservoir:powerMotor2,\n            powerMotorNozzleX:powerMotor3,\n            powerMotorNozzleY:powerMotor4,\n            powerMotorDoctor:powerMotor5,\n            powerMotorFiber:powerMotor6,\n            powerTotal:powerTotal\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"))/10; // W\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"))/10; // W\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"))/10; // W\nvar powerInfrared = powerInfrared1 + powerInfrared2 + powerInfrared3\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n} else {\n    var powerHeatingMat1 = 0;\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n} else {\n    var powerHeatingMat2 = 0;\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n} else {\n    var powerHeatingMatFiber = 0;\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n} else {\n    var powerHeatingNozzle = 0;\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n} else {\n    var powerLaser = 0;\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230/1000\n\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230/1000\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230/1000\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230/1000\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230/1000\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230/1000\n\n// Gesamtleistung\nvar powerTotal=powerInfrared+powerHeatingMat1+powerHeatingMat2+powerHeatingMatFiber+powerHeatingNozzle+powerLaser+powerMotor1+powerMotor2+powerMotor3+powerMotor4+powerMotor5+powerMotor6;\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Power\",\n        fields: {\n            powerInfrared:powerInfrared,\n            powerHeatingMat1:powerHeatingMat1,\n            powerHeatingMat2:powerHeatingMat2,\n            powerHeatingMatFiber:powerHeatingMatFiber,\n            powerHeatingNozzle:powerHeatingNozzle,\n            powerLaser:powerLaser,\n            powerMotorBuild:powerMotor1,\n            powerMotorReservoir:powerMotor2,\n            powerMotorNozzleX:powerMotor3,\n            powerMotorNozzleY:powerMotor4,\n            powerMotorDoctor:powerMotor5,\n            powerMotorFiber:powerMotor6,\n            powerTotal:powerTotal\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -128,15 +184,15 @@
         "y": 340,
         "wires": [
             [
-                "6cc982fa45d84a4d",
-                "f6c8b81ea62a84e7"
+                "72214a5c85d5f83e",
+                "74a9e8a59e7f0282"
             ]
         ]
     },
     {
-        "id": "a031969e1282aa23",
+        "id": "9b87434952c3b1ec",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Material Calculation",
         "func": "var powderWeight = parseFloat(global.get(\"powderWeight\"))\nvar powderVolume = parseFloat(global.get(\"powderVolume\"))\nvar fiberLength = parseFloat(global.get(\"fiberLength\"))\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Material\",\n        fields: {\n            powderWeight:powderWeight,\n            powderVolume:powderVolume,\n            fiberLength:fiberLength\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\n\nreturn msg;",
         "outputs": 1,
@@ -149,15 +205,15 @@
         "y": 760,
         "wires": [
             [
-                "d68cb4af46af98cc",
-                "e970d75db2b2b3ae"
+                "71376036c6689ec4",
+                "3da11da4b456b9cd"
             ]
         ]
     },
     {
-        "id": "6c2597ba69501fee",
+        "id": "78a84bc4357dd04b",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Temperature Monitoring",
         "func": "// Temperatur Gehäuse\nvar tempBuilding = global.get(\"rPT100_Building\")\n// Temperatur Düse\nvar tempNozzle = global.get(\"rPT100_Nozzle\")\n// Temperatur Faserintegrationseinheit\nvar tempFaser = global.get(\"rPT100_Fiber\")\n// Temperature Pulveroberfläche\nvar tempSurface = global.get(\"rTemperatureSurface\")\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Temperature\",\n        fields: {\n            tempBuilding:tempBuilding,\n            tempNozzle:tempNozzle,\n            tempFaser:tempFaser,\n            tempSurface:tempSurface\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
@@ -170,15 +226,15 @@
         "y": 1040,
         "wires": [
             [
-                "9db33c57dcb77e80",
-                "8b7bd0d68c046b50"
+                "24c98aec40d62039",
+                "f49a47868a01a908"
             ]
         ]
     },
     {
-        "id": "6cc982fa45d84a4d",
+        "id": "72214a5c85d5f83e",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 3",
         "active": true,
         "tosidebar": true,
@@ -193,9 +249,9 @@
         "wires": []
     },
     {
-        "id": "a3bb0340e0a914aa",
+        "id": "bcd231c287db36fd",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -217,14 +273,14 @@
         "y": 760,
         "wires": [
             [
-                "a031969e1282aa23"
+                "9b87434952c3b1ec"
             ]
         ]
     },
     {
-        "id": "d68cb4af46af98cc",
+        "id": "71376036c6689ec4",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -239,9 +295,9 @@
         "wires": []
     },
     {
-        "id": "e970d75db2b2b3ae",
+        "id": "3da11da4b456b9cd",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 4",
         "active": true,
         "tosidebar": true,
@@ -256,9 +312,9 @@
         "wires": []
     },
     {
-        "id": "673b1558530a83f5",
+        "id": "754f71704f985fdd",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -280,14 +336,14 @@
         "y": 1040,
         "wires": [
             [
-                "6c2597ba69501fee"
+                "78a84bc4357dd04b"
             ]
         ]
     },
     {
-        "id": "8b7bd0d68c046b50",
+        "id": "f49a47868a01a908",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -302,9 +358,9 @@
         "wires": []
     },
     {
-        "id": "9db33c57dcb77e80",
+        "id": "24c98aec40d62039",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 5",
         "active": true,
         "tosidebar": true,
@@ -319,9 +375,9 @@
         "wires": []
     },
     {
-        "id": "a7713f01a6a72562",
+        "id": "31b99a476597b442",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -343,14 +399,14 @@
         "y": 1180,
         "wires": [
             [
-                "3271dbdc818b6471"
+                "067a58cc9f83e710"
             ]
         ]
     },
     {
-        "id": "3271dbdc818b6471",
+        "id": "067a58cc9f83e710",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Process Monitoring",
         "func": "// Genereller Maschinenstatus\nvar machineState = global.get(\"iGeneralMachineState\")\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\n// Aktuelle Schicht\nvar currentLayer = global.get(\"iCurrentLayer\")\n\n// Gesamtanzahl Schichten\nvar totalLayers = global.get(\"iTotalLayers\")\n\nmsg.payload = [\n    {\n        measurement: \"Process Monitoring\",\n        fields: {\n            machineState:machineState,\n            process:parseFloat(global.get(\"iStateTemperatrueControlling\")),\n            component:component,\n            currentLayer:currentLayer,\n            totalLayers:totalLayers\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
@@ -363,15 +419,15 @@
         "y": 1180,
         "wires": [
             [
-                "de663d947aedac7f",
-                "1246c50191855216"
+                "d6f5b7744a8a1c89",
+                "3d6fd74e8626a6e4"
             ]
         ]
     },
     {
-        "id": "1246c50191855216",
+        "id": "3d6fd74e8626a6e4",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 6",
         "active": true,
         "tosidebar": true,
@@ -386,9 +442,9 @@
         "wires": []
     },
     {
-        "id": "de663d947aedac7f",
+        "id": "d6f5b7744a8a1c89",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -403,9 +459,9 @@
         "wires": []
     },
     {
-        "id": "b14b0b73f2335a9c",
+        "id": "d68b232ff2f059c2",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Set Emission Values",
         "func": "global.set(\"emissionPowder\", 6.9); // kg/kg, PA12\nglobal.set(\"emissionFiber\", 19.849); // kg/kg, 1k roving\n\nreturn msg;",
         "outputs": 1,
@@ -421,9 +477,9 @@
         ]
     },
     {
-        "id": "319b10ab5bcab8c5",
+        "id": "d6cbdfbf0b4a1c8f",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -438,9 +494,9 @@
         "wires": []
     },
     {
-        "id": "aa8ddc1603ece9fa",
+        "id": "0b42235ee49d2bfe",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 8",
         "active": true,
         "tosidebar": true,
@@ -455,11 +511,11 @@
         "wires": []
     },
     {
-        "id": "373116f216ab147c",
+        "id": "3b1de3d64166c5b7",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Energy Calculation",
-        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"));\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"));\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"));\nvar energyInfrared = parseFloat(global.get(\"energyInfrared\")) + (powerInfrared1+powerInfrared2+powerInfrared3)*(5/3600);\nglobal.set(\"energyInfrared\", energyInfrared)\nvar emissionInfrared = energyInfrared * parseFloat(global.get(\"carbonIntensity\"));\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n    var energyHeatingMat1 = parseFloat(global.get(\"energyHeatingMat1\"))+(powerHeatingMat1 * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMat1\", energyHeatingMat1);\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n    var energyHeatingMat2 = parseFloat(global.get(\"energyHeatingMat2\"))+(powerHeatingMat2 * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMat2\", energyHeatingMat2);\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n    var energyHeatingMatFiber = parseFloat(global.get(\"energyHeatingMatFiber\"))+(powerHeatingMatFiber * (5 / 3600)); // Wh\n    global.set(\"energyHeatingMatFiber\", energyHeatingMatFiber);\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n    var energyHeatingNozzle = parseFloat(global.get(\"energyHeatingNozzle\"))+(powerHeatingNozzle * (5 / 3600)); // Wh\n    global.set(\"energyHeatingNozzle\", energyHeatingNozzle);\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n    var energyLaser = parseFloat(global.get(\"energyLaser\"))+(powerLaser * (5 / 3600)); // Wh\n    global.set(\"energyLaser\",energyLaser);\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230;\nvar energyMotor1 = parseFloat(global.get(\"energyMotor1\"))+(powerMotor1 * (5/3600)); // Wh\nglobal.set(\"energyMotor1\",energyMotor1);\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230;\nvar energyMotor2 = parseFloat(global.get(\"energyMotor2\"))+(powerMotor2 * (5/3600)); // Wh\nglobal.set(\"energyMotor2\",energyMotor2);\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230;\nvar energyMotor3 = parseFloat(global.get(\"energyMotor3\"))+(powerMotor3 * (5/3600)); // Wh\nglobal.set(\"energyMotor3\",energyMotor3);\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230;\nvar energyMotor4 = parseFloat(global.get(\"energyMotor4\"))+(powerMotor4 * (5/3600)); // Wh\nglobal.set(\"energyMotor4\",energyMotor4);\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230;\nvar energyMotor5 = parseFloat(global.get(\"energyMotor5\"))+(powerMotor5 * (5/3600)); // Wh\nglobal.set(\"energyMotor5\",energyMotor5);\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230;\nvar energyMotor6 = parseFloat(global.get(\"energyMotor6\"))+(powerMotor6 * (5/3600)); // Wh\nglobal.set(\"energyMotor6\",energyMotor6);\n\n// Gesamtenergieverbrauch\nvar energyTotal=parseFloat(global.get(\"energyInfrared\"))+parseFloat(global.get(\"energyHeatingMat1\"))+parseFloat(global.get(\"energyHeatingMat2\"))+parseFloat(global.get(\"energyHeatingMatFiber\"))+parseFloat(global.get(\"energyHeatingNozzle\"))+parseFloat(global.get(\"energyLaser\"))+parseFloat(global.get(\"energyMotor1\"))+parseFloat(global.get(\"energyMotor2\"))+parseFloat(global.get(\"energyMotor3\"))+parseFloat(global.get(\"energyMotor4\"))+parseFloat(global.get(\"energyMotor5\"))+parseFloat(global.get(\"energyMotor6\"));\n\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Energy\",\n        fields: {\n            energyInfrared:energyInfrared,\n            energyHeatingMat1:energyHeatingMat1,\n            energyHeatingMat2:energyHeatingMat2,\n            energyHeatingMatFiber:energyHeatingMatFiber,\n            energyHeatingNozzle:energyHeatingNozzle,\n            energyLaser:energyLaser,\n            energyMotorBuild:energyMotor1,\n            energyMotorReservoir:energyMotor2,\n            energyMotorNozzleX:energyMotor3,\n            energyMotorNozzleY:energyMotor4,\n            energyMotorDoctor:energyMotor5,\n            energyMotorFiber:energyMotor6,\n            energyTotal:energyTotal\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
+        "func": "// Infrarotheizung\nvar powerInfrared1 = parseFloat(global.get(\"iPowerInfrared1\"))/10;\nvar powerInfrared2 = parseFloat(global.get(\"iPowerInfrared2\"))/10;\nvar powerInfrared3 = parseFloat(global.get(\"iPowerInfrared3\"))/10;\nvar energyInfrared = parseFloat(global.get(\"energyInfrared\")) + (powerInfrared1+powerInfrared2+powerInfrared3)*(5/3600)/1000; //kWh\nglobal.set(\"energyInfrared\", energyInfrared)\n// Heizmatte 1 (Bauplattform)\nif (global.get(\"bRelaisHeatingMat1\")===true) {\n    var powerHeatingMat1 = 100;\n    var energyHeatingMat1 = parseFloat(global.get(\"energyHeatingMat1\"))+(powerHeatingMat1 * (5 / 3600)/1000); // kWh\n    global.set(\"energyHeatingMat1\", energyHeatingMat1);\n}\n// Heizmatte 2 (Pulverplattform)\nif (global.get(\"bRelaisHeatingMat2\")===true) {\n    var powerHeatingMat2 = 100;\n    var energyHeatingMat2 = parseFloat(global.get(\"energyHeatingMat2\"))+(powerHeatingMat2 * (5 / 3600)/1000); // kWh\n    global.set(\"energyHeatingMat2\", energyHeatingMat2);\n}\n// Heizmatte 3 (Faserintegration)\nif (global.get(\"bRelaisHeatingFiber\")===true) {\n    var powerHeatingMatFiber = 50;\n    var energyHeatingMatFiber = parseFloat(global.get(\"energyHeatingMatFiber\"))+(powerHeatingMatFiber * (5 / 3600)/1000); // kWh\n    global.set(\"energyHeatingMatFiber\", energyHeatingMatFiber);\n}\n// Düsenheizung\nif (global.get(\"bRelaisHeatNozzle\")===true) {\n    var powerHeatingNozzle = 50;\n    var energyHeatingNozzle = parseFloat(global.get(\"energyHeatingNozzle\"))+(powerHeatingNozzle * (5 / 3600)/1000); // kWh\n    global.set(\"energyHeatingNozzle\", energyHeatingNozzle);\n}\n// Laser\nif (global.get(\"bLaserDI0\")===true) {\n    var powerLaser = 5;\n    var energyLaser = parseFloat(global.get(\"energyLaser\"))+(powerLaser * (5 / 3600)/1000); // kWh\n    global.set(\"energyLaser\",energyLaser);\n}\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar powerMotor1=global.get(\"iBuildPlatformCurrent\")*230/1000;\nvar energyMotor1 = parseFloat(global.get(\"energyMotor1\"))+(powerMotor1 * (5/3600)/1000); // kWh\nglobal.set(\"energyMotor1\",energyMotor1);\n// Motor 2 (Vorratsplattform)\nvar powerMotor2=global.get(\"iReservoirPlatformCurrent\")*230/1000;\nvar energyMotor2 = parseFloat(global.get(\"energyMotor2\"))+(powerMotor2 * (5/3600)/1000); // kWh\nglobal.set(\"energyMotor2\",energyMotor2);\n// Motor 3 (Düse X-Achse)\nvar powerMotor3=global.get(\"iNozzleXAxisCurrent\")*230/1000;\nvar energyMotor3 = parseFloat(global.get(\"energyMotor3\"))+(powerMotor3 * (5/3600)/1000); // kWh\nglobal.set(\"energyMotor3\",energyMotor3);\n// Motor 4 (Düse Y-Achse)\nvar powerMotor4=global.get(\"iNozzleYAxisCurrent\")*230/1000;\nvar energyMotor4 = parseFloat(global.get(\"energyMotor4\"))+(powerMotor4 * (5/3600)/1000); // kWh\nglobal.set(\"energyMotor4\",energyMotor4);\n// Motor 5 (Rakel)\nvar powerMotor5 = global.get(\"iDoctorBladeCurrent\")*230/1000;\nvar energyMotor5 = parseFloat(global.get(\"energyMotor5\"))+(powerMotor5 * (5/3600)/1000); // kWh\nglobal.set(\"energyMotor5\",energyMotor5);\n// Motor 6 (Faservorschub)\nvar powerMotor6=global.get(\"iFiberTransportIntegrationUnitCurrent\")*230/1000;\nvar energyMotor6 = parseFloat(global.get(\"energyMotor6\"))+(powerMotor6 * (5/3600)/1000); // kWh\nglobal.set(\"energyMotor6\",energyMotor6);\n\n// Gesamtenergieverbrauch\nvar energyTotal=parseFloat(global.get(\"energyInfrared\"))+parseFloat(global.get(\"energyHeatingMat1\"))+parseFloat(global.get(\"energyHeatingMat2\"))+parseFloat(global.get(\"energyHeatingMatFiber\"))+parseFloat(global.get(\"energyHeatingNozzle\"))+parseFloat(global.get(\"energyLaser\"))+parseFloat(global.get(\"energyMotor1\"))+parseFloat(global.get(\"energyMotor2\"))+parseFloat(global.get(\"energyMotor3\"))+parseFloat(global.get(\"energyMotor4\"))+parseFloat(global.get(\"energyMotor5\"))+parseFloat(global.get(\"energyMotor6\"));\n\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Energy\",\n        fields: {\n            energyInfrared:energyInfrared,\n            energyHeatingMat1:energyHeatingMat1,\n            energyHeatingMat2:energyHeatingMat2,\n            energyHeatingMatFiber:energyHeatingMatFiber,\n            energyHeatingNozzle:energyHeatingNozzle,\n            energyLaser:energyLaser,\n            energyMotorBuild:energyMotor1,\n            energyMotorReservoir:energyMotor2,\n            energyMotorNozzleX:energyMotor3,\n            energyMotorNozzleY:energyMotor4,\n            energyMotorDoctor:energyMotor5,\n            energyMotorFiber:energyMotor6,\n            energyTotal:energyTotal\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -470,15 +526,15 @@
         "y": 480,
         "wires": [
             [
-                "319b10ab5bcab8c5",
-                "aa8ddc1603ece9fa"
+                "d6cbdfbf0b4a1c8f",
+                "0b42235ee49d2bfe"
             ]
         ]
     },
     {
-        "id": "014b6dcf802afb5a",
+        "id": "ed4ccd02f8c080b0",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -500,14 +556,14 @@
         "y": 480,
         "wires": [
             [
-                "373116f216ab147c"
+                "3b1de3d64166c5b7"
             ]
         ]
     },
     {
-        "id": "a4a406a701ea7380",
+        "id": "181e7aa4a63abde2",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Initialisation",
         "props": [
             {
@@ -529,17 +585,17 @@
         "y": 60,
         "wires": [
             [
-                "5e52bdbe8fb1a36b",
-                "5a3fc5146f588100",
-                "b14b0b73f2335a9c",
-                "49fc71c01c2a1451"
+                "1ca76d30e63179c6",
+                "a408d7b67144f1e5",
+                "d68b232ff2f059c2",
+                "2e675cc216a0356e"
             ]
         ]
     },
     {
-        "id": "5e52bdbe8fb1a36b",
+        "id": "1ca76d30e63179c6",
         "type": "http request",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "GET Carbon Intensity",
         "method": "GET",
         "ret": "obj",
@@ -556,14 +612,14 @@
         "y": 60,
         "wires": [
             [
-                "a1d5192eda2bda35"
+                "7f23091a53b74482"
             ]
         ]
     },
     {
-        "id": "eddf4ee977b74842",
+        "id": "5e594d87a11eb3e3",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 9",
         "active": true,
         "tosidebar": true,
@@ -577,9 +633,9 @@
         "wires": []
     },
     {
-        "id": "a1d5192eda2bda35",
+        "id": "7f23091a53b74482",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Set Carbon Intensity Factor",
         "func": "var carbonIntensity = msg.payload['carbonIntensity']\nglobal.set(\"carbonIntensity\", carbonIntensity); // gCO2eq / kWh\nreturn msg;",
         "outputs": 1,
@@ -592,14 +648,14 @@
         "y": 60,
         "wires": [
             [
-                "eddf4ee977b74842"
+                "5e594d87a11eb3e3"
             ]
         ]
     },
     {
-        "id": "5a3fc5146f588100",
+        "id": "a408d7b67144f1e5",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Set Energy Variables",
         "func": "global.set(\"energyInfrared\", 0);\nglobal.set(\"energyHeatingMat1\", 0);\nglobal.set(\"energyHeatingMat2\", 0);\nglobal.set(\"energyHeatingMatFiber\", 0);\nglobal.set(\"energyHeatingNozzle\", 0);\nglobal.set(\"energyLaser\", 0);\nglobal.set(\"energyMotor1\", 0);\nglobal.set(\"energyMotor2\", 0);\nglobal.set(\"energyMotor3\", 0);\nglobal.set(\"energyMotor4\", 0);\nglobal.set(\"energyMotor5\", 0);\nglobal.set(\"energyMotor6\", 0);\n\nreturn msg;",
         "outputs": 1,
@@ -615,9 +671,9 @@
         ]
     },
     {
-        "id": "eebe51e2ac187d66",
+        "id": "df3588c6e5b182d7",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -639,14 +695,14 @@
         "y": 620,
         "wires": [
             [
-                "03f5c88fccd514d3"
+                "e7149dd35393afcc"
             ]
         ]
     },
     {
-        "id": "03f5c88fccd514d3",
+        "id": "e7149dd35393afcc",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Energy Emission Calculation",
         "func": "// Infrarotheizung\nvar emissionInfrared = parseFloat(global.get(\"energyInfrared\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 1 (Bauplattform)\nvar emissionHeatingMat1= parseFloat(global.get(\"energyHeatingMat1\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 2 (Pulverplattform)\nvar emissionHeatingMat2= parseFloat(global.get(\"energyHeatingMat2\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Heizmatte 3 (Faserintegration)\nvar emissionHeatingMatFiber= parseFloat(global.get(\"energyHeatingMatFiber\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Düsenheizung\nvar emissionHeatingNozzle= parseFloat(global.get(\"energyHeatingNozzle\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Laser\nvar emissionLaser= parseFloat(global.get(\"energyLaser\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Ventilator -> Grundlast\n\n// Motor 1 (Bauplattform)\nvar emissionMotor1= parseFloat(global.get(\"energyMotor1\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 2 (Vorratsplattform)\nvar emissionMotor2= parseFloat(global.get(\"energyMotor2\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 3 (Düse X-Achse)\nvar emissionMotor3= parseFloat(global.get(\"energyMotor3\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 4 (Düse Y-Achse)\nvar emissionMotor4= parseFloat(global.get(\"energyMotor4\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 5 (Rakel)\nvar emissionMotor5= parseFloat(global.get(\"energyMotor5\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n// Motor 6 (Faservorschub)\nvar emissionMotor6= parseFloat(global.get(\"energyMotor6\")) * parseFloat(global.get(\"carbonIntensity\")) / 1000;\n\n//Gesamtemissionen Energie\nvar emissionEnergy = emissionInfrared + emissionHeatingMat1 + emissionHeatingMat2 + emissionHeatingMatFiber + emissionHeatingNozzle + emissionLaser + emissionMotor1+emissionMotor2+emissionMotor3+emissionMotor4+emissionMotor5+emissionMotor6;\n\n// Gesamtemissionen für Gesamtemissionenschaubild\nvar emissionTotal = emissionEnergy + parseFloat(global.get(\"emissionMaterial\"));\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Energy Emissions\",\n        fields: {\n            emissionInfrared:emissionInfrared,\n            emissionHeatingMat1:emissionHeatingMat1,\n            emissionHeatingMat2:emissionHeatingMat2,\n            emissionHeatingMatFiber:emissionHeatingMatFiber,\n            emissionHeatingNozzle:emissionHeatingNozzle,\n            emissionLaser:emissionLaser,\n            emissionMotorBuild:emissionMotor1,\n            emissionMotorReservoir:emissionMotor2,\n            emissionMotorNozzleX:emissionMotor3,\n            emissionMotorNozzleY:emissionMotor4,\n            emissionMotorDoctor:emissionMotor5,\n            emissionMotorFiber:emissionMotor6,\n            emissionEnergy:emissionEnergy,\n            emissionTotal:emissionTotal\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
@@ -659,15 +715,15 @@
         "y": 620,
         "wires": [
             [
-                "5964070911023324",
-                "c79e20a7fe9b03cf"
+                "17cb7d7834554171",
+                "17ec9e82a9ebb115"
             ]
         ]
     },
     {
-        "id": "c79e20a7fe9b03cf",
+        "id": "17ec9e82a9ebb115",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -682,9 +738,9 @@
         "wires": []
     },
     {
-        "id": "5964070911023324",
+        "id": "17cb7d7834554171",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 10",
         "active": true,
         "tosidebar": true,
@@ -699,9 +755,9 @@
         "wires": []
     },
     {
-        "id": "047645cf0a9f4bbb",
+        "id": "1a2e5293afb2a090",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Material Emission Calculation",
         "func": "var emissionPowder = parseFloat(global.get(\"emissionPowder\")) * (parseFloat(global.get(\"weightPowder\"))/1000); // kg\nvar emissionFiber = parseFloat(global.get(\"emissionFiber\")) * parseFloat(global.get(\"lengthFiber\")) * Math.pow(0.0007/2, 2) * Math.PI * 1.77 / 1000;\n// density fiber: 1.77 g/cm3, fiber diameter: 0,007 mm\n\nvar emissionMaterial = emissionPowder+emissionFiber;\nglobal.set(\"emissionMaterial\", emissionMaterial);\n\n// Aktueller Prozessschritt\nswitch(global.get(\"iStateTemperatrueControlling\")) {\n    case 0:\n        var process = \"Idle\";\n        break;\n    case 1:\n        var process = \"Aufheizphase\";\n        break;\n    case 2:\n        var process = \"Abkühlphase\";\n        break;\n    case 3:\n        var process = \"Faserintegration\"\n        break;\n}\n\n// Bauteil\nvar component = global.get(\"component\")\n\nmsg.payload = [\n    {\n        measurement: \"Material Emission\",\n        fields: {\n            emissionPowder:emissionPowder,\n            emissionFiber:emissionFiber,\n            emissionMaterial:emissionMaterial\n        },\n        tags:{\n            process:process,\n            component:component\n        },\n        timestamp: new Date()\n    }\n];\n\nreturn msg;",
         "outputs": 1,
@@ -714,15 +770,15 @@
         "y": 900,
         "wires": [
             [
-                "0cf5c0dea6eb8453",
-                "1ec5786b8cbca2e7"
+                "ddc971e5a0b0e8b6",
+                "d4f49b4716bf3570"
             ]
         ]
     },
     {
-        "id": "723a7bc378b42028",
+        "id": "dfc83d3b57f8e172",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -744,14 +800,14 @@
         "y": 900,
         "wires": [
             [
-                "047645cf0a9f4bbb"
+                "1a2e5293afb2a090"
             ]
         ]
     },
     {
-        "id": "0cf5c0dea6eb8453",
+        "id": "ddc971e5a0b0e8b6",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -766,9 +822,9 @@
         "wires": []
     },
     {
-        "id": "1ec5786b8cbca2e7",
+        "id": "d4f49b4716bf3570",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 11",
         "active": true,
         "tosidebar": true,
@@ -783,9 +839,9 @@
         "wires": []
     },
     {
-        "id": "5f4ba7b7ce99d4b8",
+        "id": "5a980db24a0c8eaf",
         "type": "csv",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Convert CSV",
         "sep": ";",
         "hdrin": true,
@@ -801,16 +857,16 @@
         "y": 240,
         "wires": [
             [
-                "59f450b4addc90ae"
+                "c6e56daa0c732e69"
             ]
         ]
     },
     {
-        "id": "49fc71c01c2a1451",
+        "id": "2e675cc216a0356e",
         "type": "file in",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Read File",
-        "filename": "/Users/adriangrimm/Downloads/Input_Material.csv",
+        "filename": "C:\\Users\\MAPadmin\\Downloads\\Input_Material.csv",
         "filenameType": "str",
         "format": "utf8",
         "chunk": false,
@@ -821,14 +877,14 @@
         "y": 240,
         "wires": [
             [
-                "5f4ba7b7ce99d4b8"
+                "5a980db24a0c8eaf"
             ]
         ]
     },
     {
-        "id": "7017b47d6977600a",
+        "id": "5c7fb3c5faf910b0",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 12",
         "active": true,
         "tosidebar": true,
@@ -842,9 +898,9 @@
         "wires": []
     },
     {
-        "id": "59f450b4addc90ae",
+        "id": "c6e56daa0c732e69",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Set Material Variables",
         "func": "global.set(\"weightPowder\", msg.payload.weightPowder); // g\nglobal.set(\"volumePowder\", msg.payload.volumePowder); // l\nglobal.set(\"lengthFiber\", msg.payload.lengthFiber); // cm\nglobal.set(\"component\", msg.payload.component);\nglobal.set(\"crossSectionalAreaFiber\", 0.1);\nglobal.set(\"densityFiber\", 1.77); // g/cm3\n\nreturn msg;",
         "outputs": 1,
@@ -857,14 +913,14 @@
         "y": 240,
         "wires": [
             [
-                "7017b47d6977600a"
+                "5c7fb3c5faf910b0"
             ]
         ]
     },
     {
-        "id": "014abca18116ab79",
+        "id": "12497e998f77884c",
         "type": "function",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Component Information",
         "func": "\nmsg.payload = [\n    {\n        measurement: \"Component Info\",\n        fields: {\n            component:global.get(\"component\"),\n            volumePowder:global.get(\"volumePowder\"),\n            weightPowder:global.get(\"weightPowder\"),\n            lengthFiber:global.get(\"lengthFiber\"),\n            thicknessLayer:global.get(\"rLayerThickness\")\n        },\n        timestamp: new Date()\n    }\n];\nreturn msg;",
         "outputs": 1,
@@ -877,15 +933,15 @@
         "y": 1320,
         "wires": [
             [
-                "8fb27e64bd2d2ddd",
-                "3ad7d13470a18eae"
+                "030fa16f8d52a613",
+                "a295468002805703"
             ]
         ]
     },
     {
-        "id": "5725caded0a2f29e",
+        "id": "c638640bc39b1320",
         "type": "inject",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "Send Data to InfluxDB",
         "props": [
             {
@@ -907,14 +963,14 @@
         "y": 1320,
         "wires": [
             [
-                "014abca18116ab79"
+                "12497e998f77884c"
             ]
         ]
     },
     {
-        "id": "8fb27e64bd2d2ddd",
+        "id": "030fa16f8d52a613",
         "type": "influxdb batch",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "influxdb": "19d3d373c748b635",
         "precision": "",
         "retentionPolicy": "",
@@ -929,9 +985,9 @@
         "wires": []
     },
     {
-        "id": "3ad7d13470a18eae",
+        "id": "a295468002805703",
         "type": "debug",
-        "z": "3155fc29ace33dcb",
+        "z": "ac8c146e2c7dd888",
         "name": "debug 13",
         "active": true,
         "tosidebar": true,
@@ -946,9 +1002,9 @@
         "wires": []
     },
     {
-        "id": "e8634bdf5693be6f",
+        "id": "7723db6dafb4e6f7",
         "type": "ads-client-connection-status",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "SLS ADS Status",
         "connection": "3953286b03d613bb",
         "showInput": false,
@@ -957,14 +1013,14 @@
         "y": 40,
         "wires": [
             [
-                "0daed83fcdaaf541"
+                "ae4bf34b48e44d75"
             ]
         ]
     },
     {
-        "id": "0daed83fcdaaf541",
+        "id": "ae4bf34b48e44d75",
         "type": "debug",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "SLS ADS Status",
         "active": true,
         "tosidebar": true,
@@ -979,9 +1035,9 @@
         "wires": []
     },
     {
-        "id": "fa8eff2047e11308",
+        "id": "362f3fd2a8c357a1",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"iPowerInfrared1\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -993,13 +1049,15 @@
         "x": 650,
         "y": 100,
         "wires": [
-            []
+            [
+                "4dc974ab01387509"
+            ]
         ]
     },
     {
-        "id": "8506b4ce4abd3ff7",
+        "id": "5b91ecbb09f9d537",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"iPowerInfrared2\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1011,13 +1069,15 @@
         "x": 650,
         "y": 160,
         "wires": [
-            []
+            [
+                "4dc974ab01387509"
+            ]
         ]
     },
     {
-        "id": "b382369e19c81afa",
+        "id": "557b0f36dd0c9322",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"iPowerInfrared3\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1029,13 +1089,15 @@
         "x": 650,
         "y": 220,
         "wires": [
-            []
+            [
+                "4dc974ab01387509"
+            ]
         ]
     },
     {
-        "id": "6f34985467b664f2",
+        "id": "2afa14a0c342f027",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iBuildPlatformCurrent = msg.payload;\nglobal.set(\"iBuildPlatformCurrent\", iBuildPlatformCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1051,9 +1113,9 @@
         ]
     },
     {
-        "id": "3babe7c99581d022",
+        "id": "4dc974ab01387509",
         "type": "debug",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Debug needed Variable",
         "active": true,
         "tosidebar": true,
@@ -1068,9 +1130,9 @@
         "wires": []
     },
     {
-        "id": "f2563b9df2d98a3c",
+        "id": "edba918d3e2cb7fe",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iReservoirPlatformCurrent = msg.payload;\nglobal.set(\"iReservoirPlatformCurrent\", iReservoirPlatformCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1086,9 +1148,9 @@
         ]
     },
     {
-        "id": "085cff276f6467eb",
+        "id": "1352df1e9bd83567",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iNozzleXAxisCurrent = msg.payload;\nglobal.set(\"iNozzleXAxisCurrent\", iNozzleXAxisCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1104,9 +1166,9 @@
         ]
     },
     {
-        "id": "442765716c1e0a5a",
+        "id": "d1a249a736c3335c",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iNozzleYAxisCurrent = msg.payload;\nglobal.set(\"iNozzleYAxisCurrent\", iNozzleYAxisCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1122,9 +1184,9 @@
         ]
     },
     {
-        "id": "840f55f6b9e336b5",
+        "id": "d77bdab164681b13",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iDoctorBladeCurrent = msg.payload;\nglobal.set(\"iDoctorBladeCurrent\", iDoctorBladeCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1140,9 +1202,9 @@
         ]
     },
     {
-        "id": "02552fb901896a7d",
+        "id": "58c75df55352e299",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iFiberTransportIntegrationUnitCurrent = msg.payload;\nglobal.set(\"iFiberTransportIntegrationUnitCurrent\", iFiberTransportIntegrationUnitCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1158,9 +1220,9 @@
         ]
     },
     {
-        "id": "917f59d9ee2ca4d2",
+        "id": "4d832d771f50da74",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var rPT100_Building = msg.payload;\nglobal.set(\"rPT100_Building\", rPT100_Building);\nreturn msg;",
         "outputs": 1,
@@ -1176,9 +1238,9 @@
         ]
     },
     {
-        "id": "ba7e0b60aff21ddb",
+        "id": "139b64a6478465a8",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var rPT100_Nozzle = msg.payload;\nglobal.set(\"rPT100_Nozzle\", rPT100_Nozzle);\nreturn msg;",
         "outputs": 1,
@@ -1194,9 +1256,9 @@
         ]
     },
     {
-        "id": "7571ea3c94ec3ab7",
+        "id": "f987664f5856a1a3",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var rPT100_Fiber = msg.payload;\nglobal.set(\"rPT100_Fiber\", rPT100_Fiber);\nreturn msg;",
         "outputs": 1,
@@ -1212,9 +1274,9 @@
         ]
     },
     {
-        "id": "6eafa036096de8a4",
+        "id": "f228517998226e35",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var rTemperatureSurface = msg.payload;\nglobal.set(\"rTemperatureSurface\", rTemperatureSurface);\nreturn msg;",
         "outputs": 1,
@@ -1230,9 +1292,9 @@
         ]
     },
     {
-        "id": "1f8859c8347ee8a0",
+        "id": "6bbd9392673d7fc3",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iPowerInfrared1",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iPowerInfrared1",
@@ -1240,14 +1302,14 @@
         "y": 100,
         "wires": [
             [
-                "fa8eff2047e11308"
+                "362f3fd2a8c357a1"
             ]
         ]
     },
     {
-        "id": "077a1a6f946dc4d9",
+        "id": "36c3f78a5ae16e98",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iPowerInfrared2",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iPowerInfrared2",
@@ -1255,14 +1317,14 @@
         "y": 160,
         "wires": [
             [
-                "8506b4ce4abd3ff7"
+                "5b91ecbb09f9d537"
             ]
         ]
     },
     {
-        "id": "41d48723cd2eb9ce",
+        "id": "1570f085645dd598",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iPowerInfrared3",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iPowerInfrared3",
@@ -1270,14 +1332,14 @@
         "y": 220,
         "wires": [
             [
-                "b382369e19c81afa"
+                "557b0f36dd0c9322"
             ]
         ]
     },
     {
-        "id": "edb3d9714431bb8f",
+        "id": "366b4b1792cf1639",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "rTemperatureSurface",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.rTemperatureSurface",
@@ -1285,14 +1347,14 @@
         "y": 1120,
         "wires": [
             [
-                "6eafa036096de8a4"
+                "f228517998226e35"
             ]
         ]
     },
     {
-        "id": "3acb13f3afa03248",
+        "id": "8089bdaa857e4784",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "rPT100_Fiber",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.rPT100_Fiber",
@@ -1300,14 +1362,14 @@
         "y": 1060,
         "wires": [
             [
-                "7571ea3c94ec3ab7"
+                "f987664f5856a1a3"
             ]
         ]
     },
     {
-        "id": "843f7c93f5067d73",
+        "id": "b9c3c8e535023112",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "rPT100_Nozzle",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.rPT100_Nozzle",
@@ -1315,14 +1377,14 @@
         "y": 1000,
         "wires": [
             [
-                "ba7e0b60aff21ddb"
+                "139b64a6478465a8"
             ]
         ]
     },
     {
-        "id": "b39df9ad6344eb8d",
+        "id": "7ce15e9e0d0190a1",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "rPT100_Building",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.rPT100_Building",
@@ -1330,14 +1392,14 @@
         "y": 940,
         "wires": [
             [
-                "917f59d9ee2ca4d2"
+                "4d832d771f50da74"
             ]
         ]
     },
     {
-        "id": "745c7cddfb23ae8e",
+        "id": "c2c6438d7be2434a",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iFiberTransportIntegrationUnitCurrent",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iFiberTransportIntegrationUnitCurrent",
@@ -1345,14 +1407,14 @@
         "y": 880,
         "wires": [
             [
-                "02552fb901896a7d"
+                "58c75df55352e299"
             ]
         ]
     },
     {
-        "id": "8a97c1983d92d397",
+        "id": "af974bd8448e10ba",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iDoctorBladeCurrent",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iDoctorBladeCurrent",
@@ -1360,14 +1422,14 @@
         "y": 820,
         "wires": [
             [
-                "840f55f6b9e336b5"
+                "d77bdab164681b13"
             ]
         ]
     },
     {
-        "id": "58178cea05beacdb",
+        "id": "b7c977f74aeddc85",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iNozzleYAxisCurrent",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iNozzleYAxisCurrent",
@@ -1375,14 +1437,14 @@
         "y": 760,
         "wires": [
             [
-                "442765716c1e0a5a"
+                "d1a249a736c3335c"
             ]
         ]
     },
     {
-        "id": "1ddb2299f543f696",
+        "id": "ec21959c0b02c5cb",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iNozzleXAxisCurrent",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iNozzleXAxisCurrent",
@@ -1390,14 +1452,14 @@
         "y": 700,
         "wires": [
             [
-                "085cff276f6467eb"
+                "1352df1e9bd83567"
             ]
         ]
     },
     {
-        "id": "f31f605d5fb4e7a9",
+        "id": "420387db09d17a5b",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iReservoirPlatformCurrent",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iReservoirPlatformCurrent",
@@ -1405,14 +1467,14 @@
         "y": 640,
         "wires": [
             [
-                "f2563b9df2d98a3c"
+                "edba918d3e2cb7fe"
             ]
         ]
     },
     {
-        "id": "6f450b8360706f2e",
+        "id": "a7f74a5b4decfb8e",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iBuildPlatformCurrent",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.iBuildPlatformCurrent",
@@ -1420,14 +1482,14 @@
         "y": 580,
         "wires": [
             [
-                "6f34985467b664f2"
+                "2afa14a0c342f027"
             ]
         ]
     },
     {
-        "id": "39af820d857a8ce2",
+        "id": "9be12cd992865190",
         "type": "inject",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Abfrageintervall",
         "props": [
             {
@@ -1449,36 +1511,36 @@
         "y": 100,
         "wires": [
             [
-                "1f8859c8347ee8a0",
-                "077a1a6f946dc4d9",
-                "41d48723cd2eb9ce",
-                "6f450b8360706f2e",
-                "f31f605d5fb4e7a9",
-                "1ddb2299f543f696",
-                "58178cea05beacdb",
-                "8a97c1983d92d397",
-                "745c7cddfb23ae8e",
-                "b39df9ad6344eb8d",
-                "843f7c93f5067d73",
-                "3acb13f3afa03248",
-                "edb3d9714431bb8f",
-                "f37b6a91d3d4f699",
-                "c7bb622809649406",
-                "131bce551d106635",
-                "035d6e25f04c67ee",
-                "e29dbc010a7f0946",
-                "54c5af227d95cd43",
-                "3a85ef273fcb6604",
-                "eb5156484047300f",
-                "bbf8dcf1c58af18f",
-                "33bfeb7cfda55271"
+                "6bbd9392673d7fc3",
+                "36c3f78a5ae16e98",
+                "1570f085645dd598",
+                "a7f74a5b4decfb8e",
+                "420387db09d17a5b",
+                "ec21959c0b02c5cb",
+                "b7c977f74aeddc85",
+                "af974bd8448e10ba",
+                "c2c6438d7be2434a",
+                "7ce15e9e0d0190a1",
+                "b9c3c8e535023112",
+                "8089bdaa857e4784",
+                "366b4b1792cf1639",
+                "ceb30504146944e5",
+                "2bb2de40d03e5a39",
+                "db8f084da642ca61",
+                "8b70028a33485dd6",
+                "2434978a2c7382bc",
+                "26f799f39769b46a",
+                "9b75ff5d157af56f",
+                "cad1a95d2e841d7b",
+                "7523a4986dcb7d4a",
+                "8d657df51bee0bc9"
             ]
         ]
     },
     {
-        "id": "f37b6a91d3d4f699",
+        "id": "ceb30504146944e5",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iStateTemperatureControlling",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.iStateTemperatureControlling",
@@ -1486,14 +1548,14 @@
         "y": 1180,
         "wires": [
             [
-                "4f8cae9d4cebdfd4"
+                "feefe8d12fbb29c0"
             ]
         ]
     },
     {
-        "id": "4f8cae9d4cebdfd4",
+        "id": "feefe8d12fbb29c0",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iStateTemperatrueControlling = msg.payload;\nglobal.set(\"iStateTemperatrueControlling\", iStateTemperatrueControlling);\nreturn msg;",
         "outputs": 1,
@@ -1509,9 +1571,9 @@
         ]
     },
     {
-        "id": "c7bb622809649406",
+        "id": "2bb2de40d03e5a39",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "bRelaisHeatingMat1",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.bRelaisHeatingMat1",
@@ -1519,14 +1581,14 @@
         "y": 280,
         "wires": [
             [
-                "313ba23d5c8959f7"
+                "5409f572331663a6"
             ]
         ]
     },
     {
-        "id": "131bce551d106635",
+        "id": "db8f084da642ca61",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "bRelaisHeatingMat2",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.bRelaisHeatingMat2",
@@ -1534,14 +1596,14 @@
         "y": 340,
         "wires": [
             [
-                "94f8b6a4abbb3cf8"
+                "95998cc1a9693d9c"
             ]
         ]
     },
     {
-        "id": "035d6e25f04c67ee",
+        "id": "8b70028a33485dd6",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "bRelaisHeatingFiber",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.bRelaisHeatingMatFiber",
@@ -1549,14 +1611,14 @@
         "y": 400,
         "wires": [
             [
-                "1f4e5d7cf02c15dc"
+                "4b7f8730a74c9239"
             ]
         ]
     },
     {
-        "id": "e29dbc010a7f0946",
+        "id": "2434978a2c7382bc",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "bRelaisHeatNozzle",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.bRelaisHeatNozzle",
@@ -1564,14 +1626,14 @@
         "y": 460,
         "wires": [
             [
-                "4e6d5392513e859c"
+                "e70a7b1d352e6edb"
             ]
         ]
     },
     {
-        "id": "54c5af227d95cd43",
+        "id": "26f799f39769b46a",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "bLaserDI0",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_IO.bLaserDI0",
@@ -1579,14 +1641,14 @@
         "y": 520,
         "wires": [
             [
-                "297840ac8c57bc50"
+                "fe4091a15879723c"
             ]
         ]
     },
     {
-        "id": "313ba23d5c8959f7",
+        "id": "5409f572331663a6",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatingMat1\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1602,9 +1664,9 @@
         ]
     },
     {
-        "id": "94f8b6a4abbb3cf8",
+        "id": "95998cc1a9693d9c",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatingMat2\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1620,9 +1682,9 @@
         ]
     },
     {
-        "id": "1f4e5d7cf02c15dc",
+        "id": "4b7f8730a74c9239",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatingFiber\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1638,9 +1700,9 @@
         ]
     },
     {
-        "id": "4e6d5392513e859c",
+        "id": "e70a7b1d352e6edb",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatNozzle\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1656,9 +1718,9 @@
         ]
     },
     {
-        "id": "297840ac8c57bc50",
+        "id": "fe4091a15879723c",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "global.set(\"bLaserDI0\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1674,9 +1736,9 @@
         ]
     },
     {
-        "id": "3a85ef273fcb6604",
+        "id": "9b75ff5d157af56f",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iGeneralMachineState",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.iGeneralMachineState",
@@ -1684,14 +1746,14 @@
         "y": 1240,
         "wires": [
             [
-                "7ac2405a9518f8e1"
+                "467e8b3e4b4c4c3b"
             ]
         ]
     },
     {
-        "id": "eb5156484047300f",
+        "id": "cad1a95d2e841d7b",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iTotalLayers",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.iTotalLayers",
@@ -1699,14 +1761,14 @@
         "y": 1300,
         "wires": [
             [
-                "d0b065f4786f450f"
+                "2af988a8a79dccb3"
             ]
         ]
     },
     {
-        "id": "bbf8dcf1c58af18f",
+        "id": "7523a4986dcb7d4a",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "iCurrentLayer",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.iCurrentLayer",
@@ -1714,14 +1776,14 @@
         "y": 1360,
         "wires": [
             [
-                "ddfceae1b4b27bfe"
+                "bad7d2571e944ca0"
             ]
         ]
     },
     {
-        "id": "7ac2405a9518f8e1",
+        "id": "467e8b3e4b4c4c3b",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iGeneralMachineState = msg.payload;\nglobal.set(\"iGeneralMachineState\", iGeneralMachineState);\nreturn msg;",
         "outputs": 1,
@@ -1737,9 +1799,9 @@
         ]
     },
     {
-        "id": "d0b065f4786f450f",
+        "id": "2af988a8a79dccb3",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iTotalLayers = msg.payload;\nglobal.set(\"iTotalLayers\", iTotalLayers);\nreturn msg;",
         "outputs": 1,
@@ -1755,9 +1817,9 @@
         ]
     },
     {
-        "id": "ddfceae1b4b27bfe",
+        "id": "bad7d2571e944ca0",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var iCurrentLayer = msg.payload;\nglobal.set(\"iCurrentLayer\", iCurrentLayer);\nreturn msg;",
         "outputs": 1,
@@ -1773,9 +1835,9 @@
         ]
     },
     {
-        "id": "33bfeb7cfda55271",
+        "id": "8d657df51bee0bc9",
         "type": "ads-client-read-symbol",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "rLayerThickness",
         "connection": "3953286b03d613bb",
         "variableName": "GVL_Standard.rLayerThickness",
@@ -1783,14 +1845,14 @@
         "y": 1420,
         "wires": [
             [
-                "673e4010da19ac6c"
+                "4ffbc30c154bb3b3"
             ]
         ]
     },
     {
-        "id": "673e4010da19ac6c",
+        "id": "4ffbc30c154bb3b3",
         "type": "function",
-        "z": "ed5a922bb126bd97",
+        "z": "b35df062de91c24c",
         "name": "Set Global Variable",
         "func": "var rLayerThickness = msg.payload;\nglobal.set(\"rLayerThickness\", rLayerThickness);\nreturn msg;",
         "outputs": 1,
@@ -1806,9 +1868,9 @@
         ]
     },
     {
-        "id": "a09cdcc3aa8fd5d1",
+        "id": "30a018e2e3c1a528",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"iPowerInfrared1\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1824,9 +1886,9 @@
         ]
     },
     {
-        "id": "2f1d90a995ad7b86",
+        "id": "080847cf687b5b8d",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"iPowerInfrared2\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1842,9 +1904,9 @@
         ]
     },
     {
-        "id": "1cb1f9560fdefc48",
+        "id": "af87c0aecb2e25c3",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"iPowerInfrared3\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -1860,9 +1922,9 @@
         ]
     },
     {
-        "id": "f0c1425278540125",
+        "id": "57e9726b286bf99d",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iBuildPlatformCurrent = msg.payload;\nglobal.set(\"iBuildPlatformCurrent\", iBuildPlatformCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1878,9 +1940,9 @@
         ]
     },
     {
-        "id": "daa9289bc4f1f17f",
+        "id": "a04a382609a4c668",
         "type": "debug",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Debug needed Variable",
         "active": true,
         "tosidebar": true,
@@ -1895,9 +1957,9 @@
         "wires": []
     },
     {
-        "id": "0f7b1590c70ba0d9",
+        "id": "0f3cdf0a369e067e",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iReservoirPlatformCurrent = msg.payload;\nglobal.set(\"iReservoirPlatformCurrent\", iReservoirPlatformCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1913,9 +1975,9 @@
         ]
     },
     {
-        "id": "cdb10623ecbf88ad",
+        "id": "0dd0015966b008b6",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iNozzleXAxisCurrent = msg.payload;\nglobal.set(\"iNozzleXAxisCurrent\", iNozzleXAxisCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1931,9 +1993,9 @@
         ]
     },
     {
-        "id": "67a952e63a931564",
+        "id": "60606a9b9e6d5880",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iNozzleYAxisCurrent = msg.payload;\nglobal.set(\"iNozzleYAxisCurrent\", iNozzleYAxisCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1949,9 +2011,9 @@
         ]
     },
     {
-        "id": "3385086c296f7fd2",
+        "id": "1f2c5fa62ddcceb8",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iDoctorBladeCurrent = msg.payload;\nglobal.set(\"iDoctorBladeCurrent\", iDoctorBladeCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1967,9 +2029,9 @@
         ]
     },
     {
-        "id": "ce0157296b4a2d2a",
+        "id": "38f78b9dfd573c7e",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iFiberTransportIntegrationUnitCurrent = msg.payload;\nglobal.set(\"iFiberTransportIntegrationUnitCurrent\", iFiberTransportIntegrationUnitCurrent);\nreturn msg;",
         "outputs": 1,
@@ -1985,9 +2047,9 @@
         ]
     },
     {
-        "id": "fb280cbc0c5def44",
+        "id": "95ef7b7427d34ceb",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iPowerInfrared1",
         "props": [
             {
@@ -2009,14 +2071,14 @@
         "y": 40,
         "wires": [
             [
-                "a09cdcc3aa8fd5d1"
+                "30a018e2e3c1a528"
             ]
         ]
     },
     {
-        "id": "1c49df3f55713b28",
+        "id": "a2cb4583692681bb",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iPowerInfrared2",
         "props": [
             {
@@ -2038,14 +2100,14 @@
         "y": 100,
         "wires": [
             [
-                "2f1d90a995ad7b86"
+                "080847cf687b5b8d"
             ]
         ]
     },
     {
-        "id": "3105f85cb640e7cb",
+        "id": "8eeef339c4ed3ce1",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iPowerInfrared3",
         "props": [
             {
@@ -2067,14 +2129,14 @@
         "y": 160,
         "wires": [
             [
-                "1cb1f9560fdefc48"
+                "af87c0aecb2e25c3"
             ]
         ]
     },
     {
-        "id": "8b9dab45ace99725",
+        "id": "c7c55c56eb87a8a9",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iBuildPlatformCurrent",
         "props": [
             {
@@ -2096,14 +2158,14 @@
         "y": 220,
         "wires": [
             [
-                "f0c1425278540125"
+                "57e9726b286bf99d"
             ]
         ]
     },
     {
-        "id": "8a87a7f2e8fb6226",
+        "id": "c3f9c103bc7276d0",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iReservoirPlatformCurrent",
         "props": [
             {
@@ -2125,14 +2187,14 @@
         "y": 580,
         "wires": [
             [
-                "0f7b1590c70ba0d9"
+                "0f3cdf0a369e067e"
             ]
         ]
     },
     {
-        "id": "b850fe97b89585c9",
+        "id": "ede10f2c937a51a4",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iNozzleXAxisCurrent",
         "props": [
             {
@@ -2154,14 +2216,14 @@
         "y": 640,
         "wires": [
             [
-                "cdb10623ecbf88ad"
+                "0dd0015966b008b6"
             ]
         ]
     },
     {
-        "id": "a623990178552b4f",
+        "id": "04aa39edf9228a61",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iNozzleYAxisCurrent",
         "props": [
             {
@@ -2183,14 +2245,14 @@
         "y": 700,
         "wires": [
             [
-                "67a952e63a931564"
+                "60606a9b9e6d5880"
             ]
         ]
     },
     {
-        "id": "fcf84cb13214471e",
+        "id": "939514c82bc5c980",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iDoctorBladeCurrent",
         "props": [
             {
@@ -2212,14 +2274,14 @@
         "y": 760,
         "wires": [
             [
-                "3385086c296f7fd2"
+                "1f2c5fa62ddcceb8"
             ]
         ]
     },
     {
-        "id": "49b0e20592bc770c",
+        "id": "b9388a1d721b8818",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iFiberTransportIntegrationUnitCurrent",
         "props": [
             {
@@ -2241,14 +2303,14 @@
         "y": 820,
         "wires": [
             [
-                "ce0157296b4a2d2a"
+                "38f78b9dfd573c7e"
             ]
         ]
     },
     {
-        "id": "920f5113712a1f02",
+        "id": "414daff755a53c3f",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var rPT100_Building = msg.payload;\nglobal.set(\"rPT100_Building\", rPT100_Building);\nreturn msg;",
         "outputs": 1,
@@ -2264,9 +2326,9 @@
         ]
     },
     {
-        "id": "fa39c1518e290eae",
+        "id": "4101339ce284878e",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "rPT100_Building",
         "props": [
             {
@@ -2288,14 +2350,14 @@
         "y": 880,
         "wires": [
             [
-                "920f5113712a1f02"
+                "414daff755a53c3f"
             ]
         ]
     },
     {
-        "id": "52ef21b4c5934c7a",
+        "id": "2fceb8bd32171648",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var rPT100_Nozzle = msg.payload;\nglobal.set(\"rPT100_Nozzle\", rPT100_Nozzle);\nreturn msg;",
         "outputs": 1,
@@ -2311,9 +2373,9 @@
         ]
     },
     {
-        "id": "5ce778e318eeeffa",
+        "id": "9c79ea8fe8cc0ed8",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "rPT100_Nozzle",
         "props": [
             {
@@ -2335,14 +2397,14 @@
         "y": 940,
         "wires": [
             [
-                "52ef21b4c5934c7a"
+                "2fceb8bd32171648"
             ]
         ]
     },
     {
-        "id": "09cc195ac9f182ef",
+        "id": "bcf7e62f26d9096c",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var rPT100_Fiber = msg.payload;\nglobal.set(\"rPT100_Fiber\", rPT100_Fiber);\nreturn msg;",
         "outputs": 1,
@@ -2358,9 +2420,9 @@
         ]
     },
     {
-        "id": "7f0c2e39685e5b56",
+        "id": "86ad99dd854c6c32",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "rPT100_Fiber",
         "props": [
             {
@@ -2382,14 +2444,14 @@
         "y": 1000,
         "wires": [
             [
-                "09cc195ac9f182ef"
+                "bcf7e62f26d9096c"
             ]
         ]
     },
     {
-        "id": "3d42e04697b92ca7",
+        "id": "48ed9a87223b8e65",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var rTemperatureSurface = msg.payload;\nglobal.set(\"rTemperatureSurface\", rTemperatureSurface);\nreturn msg;",
         "outputs": 1,
@@ -2405,9 +2467,9 @@
         ]
     },
     {
-        "id": "c452b73aa2b5c782",
+        "id": "33fa93bf4470621a",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "rTemperatureSurface",
         "props": [
             {
@@ -2429,14 +2491,14 @@
         "y": 1060,
         "wires": [
             [
-                "3d42e04697b92ca7"
+                "48ed9a87223b8e65"
             ]
         ]
     },
     {
-        "id": "82863e4bd8cf4826",
+        "id": "f7d5ec791c8e4a82",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatingMat1\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -2452,9 +2514,9 @@
         ]
     },
     {
-        "id": "b3337d54976098a1",
+        "id": "4d5d2ed6d56c88b8",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatingMat2\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -2470,9 +2532,9 @@
         ]
     },
     {
-        "id": "97a3a4b3417c0583",
+        "id": "c4b6872968495f6a",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatingFiber\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -2488,9 +2550,9 @@
         ]
     },
     {
-        "id": "5e4bd980c68edb41",
+        "id": "0bfff1be67fd1d92",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"bRelaisHeatNozzle\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -2506,9 +2568,9 @@
         ]
     },
     {
-        "id": "d32ae0ae1464d8d3",
+        "id": "f63bb3197367de4f",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "global.set(\"bLaserDI0\", msg.payload);\nreturn msg;",
         "outputs": 1,
@@ -2524,9 +2586,9 @@
         ]
     },
     {
-        "id": "fd5951a39c7b7b52",
+        "id": "907573be0a3e994f",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "bRelaisHeatingMat1",
         "props": [
             {
@@ -2548,14 +2610,14 @@
         "y": 280,
         "wires": [
             [
-                "82863e4bd8cf4826"
+                "f7d5ec791c8e4a82"
             ]
         ]
     },
     {
-        "id": "70ebb0f2888a662f",
+        "id": "3dbdaf41d7a6cf7b",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "bRelaisHeatingMat2",
         "props": [
             {
@@ -2577,14 +2639,14 @@
         "y": 340,
         "wires": [
             [
-                "b3337d54976098a1"
+                "4d5d2ed6d56c88b8"
             ]
         ]
     },
     {
-        "id": "433ab0de830e615d",
+        "id": "168c1e07dd8ec4ac",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "bRelaisHeatingFiber",
         "props": [
             {
@@ -2606,14 +2668,14 @@
         "y": 400,
         "wires": [
             [
-                "97a3a4b3417c0583"
+                "c4b6872968495f6a"
             ]
         ]
     },
     {
-        "id": "ae544e8f56f8c259",
+        "id": "4c5764b1dfc9dd15",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "bRelaisHeatNozzle",
         "props": [
             {
@@ -2635,14 +2697,14 @@
         "y": 460,
         "wires": [
             [
-                "5e4bd980c68edb41"
+                "0bfff1be67fd1d92"
             ]
         ]
     },
     {
-        "id": "36b2068fd03af592",
+        "id": "19712ca5b779e84f",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "bLaserDI0",
         "props": [
             {
@@ -2664,14 +2726,14 @@
         "y": 520,
         "wires": [
             [
-                "d32ae0ae1464d8d3"
+                "f63bb3197367de4f"
             ]
         ]
     },
     {
-        "id": "40656248ed4e7eea",
+        "id": "1d371620279e9644",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iStateTemperatrueControlling = msg.payload;\nglobal.set(\"iStateTemperatrueControlling\", iStateTemperatrueControlling);\nreturn msg;",
         "outputs": 1,
@@ -2687,9 +2749,9 @@
         ]
     },
     {
-        "id": "6c5f00aeef88e856",
+        "id": "9244cb2caad30ec0",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iStateTemperatrueControlling",
         "props": [
             {
@@ -2711,14 +2773,14 @@
         "y": 1120,
         "wires": [
             [
-                "40656248ed4e7eea"
+                "1d371620279e9644"
             ]
         ]
     },
     {
-        "id": "8558594fa249a323",
+        "id": "f10eb456d7eea007",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iGeneralMachineState = msg.payload;\nglobal.set(\"iGeneralMachineState\", iGeneralMachineState);\nreturn msg;",
         "outputs": 1,
@@ -2734,9 +2796,9 @@
         ]
     },
     {
-        "id": "b471388716d7bd8e",
+        "id": "ae2f7b1f924bfa23",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iGeneralMachineState",
         "props": [
             {
@@ -2758,14 +2820,14 @@
         "y": 1180,
         "wires": [
             [
-                "8558594fa249a323"
+                "f10eb456d7eea007"
             ]
         ]
     },
     {
-        "id": "a858bd46a1835840",
+        "id": "561b15b06f5bc63e",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iTotalLayers = msg.payload;\nglobal.set(\"iTotalLayers\", iTotalLayers);\nreturn msg;",
         "outputs": 1,
@@ -2781,9 +2843,9 @@
         ]
     },
     {
-        "id": "8097bd732ec92fe6",
+        "id": "f958e1338e73ca6b",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iTotalLayers",
         "props": [
             {
@@ -2805,14 +2867,14 @@
         "y": 1240,
         "wires": [
             [
-                "a858bd46a1835840"
+                "561b15b06f5bc63e"
             ]
         ]
     },
     {
-        "id": "9a06689c7629e5d7",
+        "id": "a85ff1bf9088ae2f",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var iCurrentLayer = msg.payload;\nglobal.set(\"iCurrentLayer\", iCurrentLayer);\nreturn msg;",
         "outputs": 1,
@@ -2828,9 +2890,9 @@
         ]
     },
     {
-        "id": "fbe0ee78923f7442",
+        "id": "fdaac708b8e7f627",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "iCurrentLayer",
         "props": [
             {
@@ -2852,14 +2914,14 @@
         "y": 1300,
         "wires": [
             [
-                "9a06689c7629e5d7"
+                "a85ff1bf9088ae2f"
             ]
         ]
     },
     {
-        "id": "a399f6cc10ac29eb",
+        "id": "6e2944cbb88aaa7a",
         "type": "inject",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "rLayerThickness",
         "props": [
             {
@@ -2881,14 +2943,14 @@
         "y": 1360,
         "wires": [
             [
-                "062477fa93e88624"
+                "6ec432c3c477f277"
             ]
         ]
     },
     {
-        "id": "062477fa93e88624",
+        "id": "6ec432c3c477f277",
         "type": "function",
-        "z": "acbe6deed3bf2340",
+        "z": "2d46b82c2bafaf69",
         "name": "Set Global Variable",
         "func": "var rLayerThickness = msg.payload;\nglobal.set(\"rLayerThickness\", rLayerThickness);\nreturn msg;",
         "outputs": 1,
